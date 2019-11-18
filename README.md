@@ -15,8 +15,11 @@ A clone of classic arcade game Arkanoid written in javascript and shark themed. 
  * `webpack` to bundle js files
  
 Additionally, the following scripts will be involved:
+
 `aquarium.js`: This script handles rendering and managing of the game objects along with the launchpad movement.
+
 `sealife.js`: This script handles basic sealife data like type and hit points.
+
 `shark.js`: This script handles the position logic of the shark in the game along with stats
 
 ## Implementation Timeline
