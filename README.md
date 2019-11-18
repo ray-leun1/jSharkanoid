@@ -20,7 +20,7 @@ Additionally, the following scripts will be involved:
 `shark.js`: This script handles the position logic of the shark in the game along with stats
 
 ## Implementation Timeline
-**Day 1:** Setup node modules including Browserify, setup project skeleton. Organize sprites and get them working.
+**Day 1:** Setup node modules including webpack, setup project skeleton. Organize sprites and get them working.
 
 **Day 2:** Setup object movement and collision and test them, then work on game logic associated with various object collisions
 
