@@ -7,7 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const ctx = canvasEl.getContext("2d");
   ctx.imageSmoothingEnabled = false;
-
+  
   const aquarium = new Aquarium(ctx);
+  canvasEl.addEventListener('mousemove', e => aquarium.mousePos(e));
+  canvasEl.addEventListener('click', e => aquarium.launch(e));
   aquarium.start();
 });

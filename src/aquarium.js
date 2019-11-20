@@ -6,11 +6,10 @@ class Aquarium {
   constructor(ctx) {
     this.ctx = ctx;
     this.frame = 0;
-    this.launchpad = null;
-    this.shark = null;
+    this.launchpad = new Launchpad({width: Aquarium.WIDTH, height: Aquarium.HEIGHT});
+    this.shark = new Shark(this.launchpad);
     this.sealife = [];
 
-    this.generateShark();
     this.generateSealife();
     this.animate = this.animate.bind(this);
   }
@@ -23,17 +22,17 @@ class Aquarium {
     ) {
       shark.calcAngle('vel x mirror');
     } else if ( // Ceiling collision and floor collision (DEBUG)
-      (shark.pos.y < shark.size && shark.vel.y < 0) ||
-      (shark.pos.y > (Aquarium.HEIGHT - shark.size) && shark.vel.y > 0)
+      (shark.pos.y < shark.size && shark.vel.y < 0)
+      // || (shark.pos.y > (Aquarium.HEIGHT - shark.size) && shark.vel.y > 0)
     ) {
       shark.calcAngle('vel y mirror');
+    } else if ( // Shark injury
+      (shark.pos.y > (Aquarium.HEIGHT + shark.width * 2/3) && shark.vel.y > 0)
+    ) {
+      shark.injure();
     }
   };
-  
-  generateShark() {
-    this.shark = new Shark({width: Aquarium.WIDTH, height: Aquarium.HEIGHT});
-  }
-  
+
   generateSealife() {
     let genList = [
       'anchovy', 'crab1', 'seahorse1', 'grunt', 'croaker', 'corepod',
@@ -95,19 +94,30 @@ class Aquarium {
     this.sealife.splice(this.sealife.indexOf(sealife), 1);
   }
 
+  mousePos(e) {
+    let centerX = e.clientX;
+    this.launchpad.setPos(centerX);
+  }
+
+  launch(e) {
+    this.shark.setSpeed(5);
+  }
+
   draw() {
     Aquarium.BG.onload = () => this.ctx.drawImage(Aquarium.BG, 0, 0);
     this.ctx.drawImage(Aquarium.BG, 0, 0);
+    this.launchpad.draw(this.ctx);
     this.shark.draw(this.ctx);
     this.sealife.forEach(consumable => consumable.draw(this.ctx));
   }
 
   animate() {
-    this.frame += 1;
+    this.frame++;
     this.shark.setFrame(Math.floor(this.frame / 4) % 7 - 1)
 
     this.ctx.clearRect(0, 0, Aquarium.WIDTH, Aquarium.HEIGHT);
     this.shark.move();
+    this.launchpad.collision(this.shark);
     this.collision(this.shark);
     this.sealife.forEach(consumable => consumable.collision(this.shark));
     this.draw();
@@ -115,10 +125,7 @@ class Aquarium {
   }
 
   start() {
-    this.shark.setPos({ x: Aquarium.WIDTH / 2, y: Aquarium.HEIGHT - 30 });
-    this.shark.setSpeed(5);
-    this.shark.setAngle(270);
-    this.shark.setFrame(0);
+    this.shark.reset();
 
     // this.animate();
     setInterval(this.animate, 16.67)

@@ -1,12 +1,12 @@
-const Aquarium = require('./aquarium')
-
 class Shark {
-  constructor() {
+  constructor(launchpad) {
+    this.launchpad = launchpad;
     this.size = 5;
     this.pos = {x: 0, y: 0};
     this.speed = 0;
     this.vel = {x: 0, y: 0};
     this.angle = 270;
+    this.hp = 3;
     this.image = new Image();
     this.image.src = '../img/SharkSpriteSheet_110x45.png';
     this.width = 110;
@@ -65,6 +65,14 @@ class Shark {
   }
 
   draw(ctx) {
+    if (this.speed === 0) {
+      this.setPos({
+        x: this.launchpad.x1 + (this.launchpad.size.width / 2),
+        y: this.launchpad.y1 + 10
+      });
+      this.setFrame(0);
+    };
+
     let localCoords = this.localPos();
     this.frame += 1;
 
@@ -96,8 +104,19 @@ class Shark {
     this.pos.y += this.vel.y;
   }
 
-  remove() {
-    aquarium.remove(this);
+  injure() {
+    this.hp -= 1;
+    this.reset();
+  }
+
+  reset() {
+    this.setPos({
+      x: this.launchpad.x1 + (this.launchpad.size.width / 2),
+      y: this.launchpad.y1 + 10
+    });
+    this.setSpeed(0);
+    this.setAngle(270);
+    this.setFrame(0);
   }
 }
 
