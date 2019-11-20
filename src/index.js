@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   canvasEl.height = Aquarium.HEIGHT;
 
   const ctx = canvasEl.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
 
   const aquarium = new Aquarium(ctx);
   aquarium.start();

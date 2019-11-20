@@ -1,13 +1,12 @@
 const Aquarium = require('./aquarium')
 
 class Shark {
-  constructor(aquariumSize) {
+  constructor() {
     this.size = 7;
     this.pos = {x: 0, y: 0};
     this.speed = 0;
     this.vel = {x: 0, y: 0};
     this.angle = 270;
-    this.aquariumSize = aquariumSize;
     this.image = new Image();
     this.image.src = '../img/SharkSpriteSheet_110x45.png';
     this.width = 110;
@@ -16,16 +15,21 @@ class Shark {
   }
 
   setPos(pos) {
-    if (pos === 'initial') {
-      this.pos = {x: this.aquariumSize.width / 2, y: this.aquariumSize.height - 30};
-    } else {
-      this.pos = pos;
-    }
+    this.pos = pos;
   }
 
   setSpeed(speed) {
     this.speed = speed;
     this.setVel();
+  }
+
+  calcAngle(option) {
+    if (option === 'vel x mirror') {
+      if (this.vel.y < 0) this.setAngle(540 - this.angle);
+      if (this.vel.y > 0) this.setAngle(180 - this.angle);
+    } else if (option === 'vel y mirror') {
+      this.setAngle(360 - this.angle);
+    }
   }
 
   setAngle(angle) {
@@ -47,6 +51,10 @@ class Shark {
     this.vel.y = this.speed * Math.sin(Math.PI * this.angle / 180);
   }
 
+  setFrame(frame) {
+    this.frame = frame;
+  }
+
   localPos() { // Calculate position in shark local coordinates
     let cosAngle = Math.cos(Math.PI * this.angle / 180);
     let sinAngle = Math.sin(Math.PI * this.angle / 180);
@@ -56,41 +64,13 @@ class Shark {
     }
   }
 
-  collision() {
-    // Wall and ceiling collision
-    if (        // Left wall collision
-      this.pos.x < this.size
-      && this.vel.x < 0
-    ) {
-      if (this.vel.y < 0) this.setAngle(180 - this.angle);
-      if (this.vel.y > 0) this.setAngle(540 - this.angle);
-    } else if ( // Right wall collision
-      this. pos.x > (this.aquariumSize.width - this.size)
-      && this.vel.x > 0
-    ) {
-      if (this.vel.y < 0) this.setAngle(180 - this.angle);
-      if (this.vel.y > 0) this.setAngle(540 - this.angle);
-    } else if ( // Ceiling collision
-      this.pos.y < this.size
-      && this.vel.y < 0
-    ) {
-      this.setAngle(360 - this.angle);
-    }
-      else if ( // Floor collision (DEBUG)
-      this.pos.y > (this.aquariumSize.height - this.size)
-      && this.vel.y > 0
-    ) {
-      this.setAngle(360 - this.angle);
-    }
-  };
-
   draw(ctx) {
     let localCoords = this.localPos();
     this.frame += 1;
     ctx.save();
     ctx.rotate(Math.PI * this.angle / 180);
     ctx.drawImage(this.image,
-      (Math.floor(this.frame / 4) % 7) * this.width, 0,
+      this.frame * this.width, 0,
       this.width, this.height,
       localCoords.x - 98, localCoords.y - 18,
       this.width, this.height
@@ -100,7 +80,7 @@ class Shark {
       ctx.save();
       ctx.rotate(Math.PI * this.angle / 180);
       ctx.drawImage(this.image,
-        (Math.floor(this.frame / 4) % 7) * this.width, 0,
+        this.frame * this.width, 0,
         this.width, this.height,
         localCoords.x - 98, localCoords.y - 18,
         this.width, this.height
