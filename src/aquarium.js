@@ -35,12 +35,60 @@ class Aquarium {
   }
   
   generateSealife() {
-    this.sealife.push(Sealife.create(
-      this,
-      {x: 30, y: 30},
-      2,
-      'anchovy'
-    ))
+    let genList = [
+      'anchovy', 'crab1', 'seahorse1', 'grunt', 'croaker', 'corepod',
+      'sandlance', 'sardine', 'herring', 'pollock', 'crab2', 'butter',
+      'mantaRay', 'jellyfish1', 'jellyfish2', 'seahorse2', 'jellyfish3',
+      'crab3', 'jellyfish4', 'halfbeak', 'sunfish1', 'sunfish2', 'crab4',
+      'anglerfish', 'polarBear1', 'polarBear2', 'gastropod1', 'gastropod2',
+      'pufferfish', 'whale1', 'whale2', 'swordfish', 'baiji'
+    ]
+
+    genList.forEach((nommable, idx) => {
+      let sizeable = () => {
+        let maxPosX;
+        let maxPosY;
+        let maxScale;
+
+        if (idx < 15) {
+          maxPosX = Aquarium.WIDTH - 32;
+          maxPosY = Aquarium.HEIGHT - 16;
+          maxScale = 3;
+        } else if (idx < 30) {
+          maxPosX = Aquarium.WIDTH - 64;
+          maxPosY = Aquarium.HEIGHT - 32;
+          maxScale = 2;
+        } else {
+          maxPosX = Aquarium.WIDTH - 80;
+          maxPosY = Aquarium.HEIGHT - 80;
+          maxScale = 1;
+        }
+
+        return {
+          pos: {
+            x: Math.floor(Math.random() * maxPosX),
+            y: Math.floor(Math.random() * maxPosY)
+          },
+          scale: (Math.random() * maxScale)
+        };
+      }
+
+      let {pos, scale} = sizeable();
+
+      this.sealife.push(Sealife.create(
+        this,
+        pos,
+        scale,
+        nommable
+      ))
+    })
+
+    // this.sealife.push(Sealife.create(
+    //   this,
+    //   {x: 200, y: 200},
+    //   2,
+    //   genList[1]
+    // ))
   }
 
   destroy(sealife) {
