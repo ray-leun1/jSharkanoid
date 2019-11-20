@@ -2,7 +2,7 @@ const Aquarium = require('./aquarium')
 
 class Shark {
   constructor() {
-    this.size = 7;
+    this.size = 5;
     this.pos = {x: 0, y: 0};
     this.speed = 0;
     this.vel = {x: 0, y: 0};
@@ -67,6 +67,19 @@ class Shark {
   draw(ctx) {
     let localCoords = this.localPos();
     this.frame += 1;
+
+    this.image.onload = () => {
+      ctx.save();
+      ctx.rotate(Math.PI * this.angle / 180);
+      ctx.drawImage(this.image,
+        this.frame * this.width, 0,
+        this.width, this.height,
+        localCoords.x - 98, localCoords.y - 18,
+        this.width, this.height
+        );
+      ctx.restore();
+    }
+
     ctx.save();
     ctx.rotate(Math.PI * this.angle / 180);
     ctx.drawImage(this.image,
@@ -76,17 +89,6 @@ class Shark {
       this.width, this.height
     );
     ctx.restore();
-    this.image.onload = () => {
-      ctx.save();
-      ctx.rotate(Math.PI * this.angle / 180);
-      ctx.drawImage(this.image,
-        this.frame * this.width, 0,
-        this.width, this.height,
-        localCoords.x - 98, localCoords.y - 18,
-        this.width, this.height
-      );
-      ctx.restore();
-    }
   }
 
   move() {
@@ -95,7 +97,7 @@ class Shark {
   }
 
   remove() {
-    this.aquarium.remove(this);
+    aquarium.remove(this);
   }
 }
 

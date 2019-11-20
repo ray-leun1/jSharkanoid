@@ -29,19 +29,29 @@ class Aquarium {
       shark.calcAngle('vel y mirror');
     }
   };
-
-  generateLaunchpad() {
-
-  }
-
+  
   generateShark() {
     this.shark = new Shark({width: Aquarium.WIDTH, height: Aquarium.HEIGHT});
   }
+  
+  generateSealife() {
+    this.sealife.push(Sealife.create(
+      this,
+      {x: 30, y: 30},
+      2,
+      'anchovy'
+    ))
+  }
+
+  destroy(sealife) {
+    this.sealife.splice(this.sealife.indexOf(sealife), 1);
+  }
 
   draw() {
-    this.ctx.drawImage(Aquarium.BG, 0, 0);
     Aquarium.BG.onload = () => this.ctx.drawImage(Aquarium.BG, 0, 0);
+    this.ctx.drawImage(Aquarium.BG, 0, 0);
     this.shark.draw(this.ctx);
+    this.sealife.forEach(consumable => consumable.draw(this.ctx));
   }
 
   animate() {
@@ -51,6 +61,7 @@ class Aquarium {
     this.ctx.clearRect(0, 0, Aquarium.WIDTH, Aquarium.HEIGHT);
     this.shark.move();
     this.collision(this.shark);
+    this.sealife.forEach(consumable => consumable.collision(this.shark));
     this.draw();
     // requestAnimationFrame(this.animate());
   }
