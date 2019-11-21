@@ -14,7 +14,43 @@ class Sealife {
   }
 
   collision(shark) {
-    if ( // Left and right side collision
+    if ( // Corner collision, upper left
+      (shark.pos.x < this.x1) && (shark.pos.y < this.y1) 
+      && Math.sqrt(
+        Math.pow(shark.pos.x - this.x1, 2)
+        + Math.pow(shark.pos.y - this.y1, 2)
+      ) < shark.size
+    ) {
+      console.log('Upper left corner collision');
+      shark.calcAngle('corner', [this.x1, this.y1]);
+    } else if ( // Corner collision, upper right
+      (shark.pos.x > this.x2) && (shark.pos.y < this.y1)
+      && Math.sqrt(
+        Math.pow(shark.pos.x - this.x2, 2)
+        + Math.pow(shark.pos.y - this.y1, 2)
+      ) < shark.size
+    ) {
+      console.log('Upper right corner collision');
+      shark.calcAngle('corner', [this.x2, this.y1]);
+    } else if ( // Corner collision, lower left
+      (shark.pos.x < this.x1) && (shark.pos.y > this.y2)
+      && Math.sqrt(
+        Math.pow(shark.pos.x - this.x1, 2)
+        + Math.pow(shark.pos.y - this.y2, 2)
+      ) < shark.size
+    ) {
+      console.log('Lower left corner collision');
+      shark.calcAngle('corner', [this.x1, this.y2]);
+    } else if ( // Corner collision, lower right
+    (shark.pos.x > this.x2) && (shark.pos.y > this.y2)
+      && Math.sqrt(
+        Math.pow(shark.pos.x - this.x2, 2)
+        + Math.pow(shark.pos.y - this.y2, 2)
+      ) < shark.size
+    ) {
+      console.log('Lower right corner collision');
+      shark.calcAngle('corner', [this.x2, this.y2]);
+    } else if ( // Left and right side collision
       ((shark.vel.x > 0 && Math.abs(shark.pos.x - this.x1) < shark.size) ||
       (shark.vel.x < 0 && Math.abs(shark.pos.x - this.x2) < shark.size)) &&
       shark.pos.y > this.y1 && shark.pos.y < this.y2
@@ -86,7 +122,8 @@ Sealife.create = (aquarium, pos, scale, name) => {
     whale1: '62x30_48x16_11x4_whale.png',
     whale2: '62x32_48x16_11x4_whale.png',
     swordfish: '64x16_40x8_17x4_swordfish.png',
-    baiji: '64x22_44x14_10x4_baiji.png'
+    baiji: '64x22_44x14_10x4_baiji.png',
+    duck: '128x29_110x22_8x3_Duck.png'
   }
 
   let filename = fileAssociations[name];

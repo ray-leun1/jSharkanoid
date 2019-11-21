@@ -1,7 +1,7 @@
 class Shark {
   constructor(launchpad) {
     this.launchpad = launchpad;
-    this.size = 5;
+    this.size = 6;
     this.pos = {x: 0, y: 0};
     this.speed = 0;
     this.vel = {x: 0, y: 0};
@@ -23,23 +23,30 @@ class Shark {
     this.setVel();
   }
 
-  calcAngle(option) {
+  calcAngle(option, cornerParams) {
     if (option === 'vel x mirror') {
       if (this.vel.y < 0) this.setAngle(540 - this.angle);
       if (this.vel.y > 0) this.setAngle(180 - this.angle);
     } else if (option === 'vel y mirror') {
       this.setAngle(360 - this.angle);
+    } else if (option === 'corner') {
+      let vector = [cornerParams[0] - this.pos.x, cornerParams[1] - this.pos.y];
+      let vectorAngle = Math.atan(vector[1] / vector[0]) * 180 / Math.PI;
+      let tangentAngle = vectorAngle + 90;
+      let newAngle = 360 - (this.angle - tangentAngle) + tangentAngle;
+      while (newAngle > 360) newAngle -= 360;
+      this.setAngle(newAngle);
     }
   }
 
   setAngle(angle) {
-    if (
-      (this.angle > 359.5 && this.angle < 0.5) ||
+    if (this.speed !== 0 &&
+      ((this.angle > 359.5 && this.angle < 0.5) ||
       (this.angle > 89.5 && this.angle < 90.5) ||
       (this.angle > 179.5 && this.angle < 180.5) ||
-      (this.angle > 269.5 && this.angle < 270.5)
+      (this.angle > 269.5 && this.angle < 270.5))
     ) {
-      this.angle += [-30, 30][Math.floor(Math.random() * 2)]
+      this.angle += [-1, 1][Math.floor(Math.random() * 2)]
     } else {
       this.angle = angle;
     }

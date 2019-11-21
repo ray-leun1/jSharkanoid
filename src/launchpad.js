@@ -8,6 +8,7 @@ class Launchpad {
     this.y1 = aquarium.height - 16 - this.size.height;
     this.x2 = this.x1 + this.size.width;
     this.y2 = this.y1 + this.size.height;
+    this.vel = 0;
   }
 
   collision(shark) {
@@ -38,6 +39,8 @@ class Launchpad {
   }
 
   setPos(centerX) {
+    let oldx1 = this.x1;
+
     if (centerX < (this.size.width / 2)) {
       this.x1 = 0;
       this.x2 = this.size.width;
@@ -48,6 +51,12 @@ class Launchpad {
       this.x1 = centerX - this.size.width / 2;
       this.x2 = centerX + this.size.width / 2;
     }
+
+    // if (oldx1 )
+  }
+
+  setVel(vel) {
+    this.vel = vel;
   }
 }
 
