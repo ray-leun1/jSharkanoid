@@ -1,7 +1,7 @@
 class Shark {
   constructor(launchpad) {
     this.launchpad = launchpad;
-    this.size = 5;
+    this.size = 6;
     this.pos = {x: 0, y: 0};
     this.speed = 0;
     this.vel = {x: 0, y: 0};
@@ -23,23 +23,42 @@ class Shark {
     this.setVel();
   }
 
-  calcAngle(option) {
+  calcAngle(option, params) {
     if (option === 'vel x mirror') {
       if (this.vel.y < 0) this.setAngle(540 - this.angle);
       if (this.vel.y > 0) this.setAngle(180 - this.angle);
     } else if (option === 'vel y mirror') {
       this.setAngle(360 - this.angle);
+    } else if (option === 'corner') {
+      let vector = {x: params.x - this.pos.x, y: params.y - this.pos.y};
+      let vectorAngle = Math.atan(vector.y / vector.x) * 180 / Math.PI;
+      let tangentAngle = vectorAngle + 90;
+      let newAngle = 360 - (this.angle - tangentAngle) + tangentAngle;
+      while (newAngle > 360) newAngle -= 360;
+      this.setAngle(newAngle);
+    } else if (option === 'launchpad') {
+      let newVel = {x: this.vel.x + (params.vel * params.friction), y: this.vel.y}
+      if (newVel.x === 0) newVel.x += [-1, 1][Math.floor(Math.random() * 2)];
+      let newAngle = Math.atan(newVel.y / newVel.x) * 180 / Math.PI;
+      if ((newVel.x < 0 && newVel.y > 1) || (newVel.x < 0 && newVel.y < 0)) {
+        newAngle += 180;
+      } else if (newVel.x > 1 && newVel.y < 1) {
+        newAngle += 360;
+      }
+      console.log({dVel: params.vel * params.friction, oldAngle: this.angle, newAngle})
+      this.setAngle(newAngle);
+      this.calcAngle('vel y mirror');
     }
   }
 
   setAngle(angle) {
-    if (
-      (this.angle > 359.5 && this.angle < 0.5) ||
+    if (this.speed !== 0 &&
+      ((this.angle > 359.5 && this.angle < 0.5) ||
       (this.angle > 89.5 && this.angle < 90.5) ||
       (this.angle > 179.5 && this.angle < 180.5) ||
-      (this.angle > 269.5 && this.angle < 270.5)
+      (this.angle > 269.5 && this.angle < 270.5))
     ) {
-      this.angle += [-30, 30][Math.floor(Math.random() * 2)]
+      this.angle += [-1, 1][Math.floor(Math.random() * 2)]
     } else {
       this.angle = angle;
     }
@@ -66,11 +85,7 @@ class Shark {
 
   draw(ctx) {
     if (this.speed === 0) {
-      this.setPos({
-        x: this.launchpad.x1 + (this.launchpad.size.width / 2),
-        y: this.launchpad.y1 + 10
-      });
-      this.setFrame(0);
+      this.reset();
     };
 
     let localCoords = this.localPos();
@@ -112,7 +127,7 @@ class Shark {
   reset() {
     this.setPos({
       x: this.launchpad.x1 + (this.launchpad.size.width / 2),
-      y: this.launchpad.y1 + 10
+      y: this.launchpad.y1 - 10
     });
     this.setSpeed(0);
     this.setAngle(270);
