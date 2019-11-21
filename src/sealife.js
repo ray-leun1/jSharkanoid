@@ -22,7 +22,7 @@ class Sealife {
       ) < shark.size
     ) {
       console.log('Upper left corner collision');
-      shark.calcAngle('corner', [this.x1, this.y1]);
+      shark.calcAngle('corner', {x: this.x1, y: this.y1});
     } else if ( // Corner collision, upper right
       (shark.pos.x > this.x2) && (shark.pos.y < this.y1)
       && Math.sqrt(
@@ -31,7 +31,7 @@ class Sealife {
       ) < shark.size
     ) {
       console.log('Upper right corner collision');
-      shark.calcAngle('corner', [this.x2, this.y1]);
+      shark.calcAngle('corner', {x: this.x2, y: this.y1});
     } else if ( // Corner collision, lower left
       (shark.pos.x < this.x1) && (shark.pos.y > this.y2)
       && Math.sqrt(
@@ -40,7 +40,7 @@ class Sealife {
       ) < shark.size
     ) {
       console.log('Lower left corner collision');
-      shark.calcAngle('corner', [this.x1, this.y2]);
+      shark.calcAngle('corner', {x: this.x1, y: this.y2});
     } else if ( // Corner collision, lower right
     (shark.pos.x > this.x2) && (shark.pos.y > this.y2)
       && Math.sqrt(
@@ -49,7 +49,7 @@ class Sealife {
       ) < shark.size
     ) {
       console.log('Lower right corner collision');
-      shark.calcAngle('corner', [this.x2, this.y2]);
+      shark.calcAngle('corner', {x: this.x2, y: this.y2});
     } else if ( // Left and right side collision
       ((shark.vel.x > 0 && Math.abs(shark.pos.x - this.x1) < shark.size) ||
       (shark.vel.x < 0 && Math.abs(shark.pos.x - this.x2) < shark.size)) &&

@@ -106,9 +106,10 @@ class Aquarium {
   draw() {
     Aquarium.BG.onload = () => this.ctx.drawImage(Aquarium.BG, 0, 0);
     this.ctx.drawImage(Aquarium.BG, 0, 0);
-    this.launchpad.draw(this.ctx);
     this.shark.draw(this.ctx);
+    this.launchpad.draw(this.ctx);
     this.sealife.forEach(consumable => consumable.draw(this.ctx));
+
   }
 
   animate() {
