@@ -28,6 +28,7 @@ class Aquarium {
     this.launchpad = new Launchpad({width: Aquarium.WIDTH, height: Aquarium.HEIGHT});
     this.shark = new Shark(this.launchpad);
     this.sealife = [];
+    this.numNoms = 0;
     this.nommed = {
       smol: 0,
       medium: 0,
@@ -41,6 +42,8 @@ class Aquarium {
     this.paused = false;
     this.about = false;
     this.gameover = false;
+    this.gameWon = false;
+    this.numWins = 0;
 
     this.animate = this.animate.bind(this);
     window.onscroll = () => this.getOffset();
@@ -126,6 +129,8 @@ class Aquarium {
         nommable
       ))
     })
+
+    this.numNoms = this.sealife.length;
   }
 
   calcSpeedAdjust() {
@@ -264,6 +269,9 @@ class Aquarium {
 
     this.draw();
     
+    if (Object.values(this.nommed).reduce((acc, curr) => acc + curr)
+      === (this.numWins + 1) * this.numNoms
+    ) this.gameWon = true;
     if (this.shark.hp < 1) this.gameover = true;
   }
 
