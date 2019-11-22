@@ -9,6 +9,22 @@ class Shark {
     this.hp = 3;
     this.image = new Image();
     this.image.src = './img/SharkSpriteSheet_110x45.png';
+    this.chompSounds = [
+      new Audio('./sound/ravenous-hunger01.mp3'),
+      new Audio('./sound/ravenous-hunger02.mp3'),
+      new Audio('./sound/ravenous-hunger03.mp3'),
+      new Audio('./sound/ravenous-hunger04.mp3'),
+      new Audio('./sound/ravenous-hunger05.mp3'),
+      new Audio('./sound/ravenous-hunger06.mp3'),
+      new Audio('./sound/ravenous-hunger07.mp3'),
+      new Audio('./sound/ravenous-hunger08.mp3'),
+      new Audio('./sound/ravenous-hunger09.mp3'),
+      new Audio('./sound/ravenous-hunger10.mp3'),
+      new Audio('./sound/ravenous-hunger11.mp3'),
+      new Audio('./sound/ravenous-hunger12.mp3'),
+      new Audio('./sound/ravenous-hunger13.mp3'),
+    ];
+    this.chompSounds.forEach(chomp => chomp.volume = 0.05);
     this.width = 110;
     this.height = 45;
     this.frame = 0;
@@ -53,10 +69,10 @@ class Shark {
 
   setAngle(angle) {
     if (!this.launching &&
-      ((this.angle > 359 && this.angle < 1) ||
+      ((this.angle > 355 && this.angle < 5) ||
       (this.angle > 89.5 && this.angle < 90.5) ||
-      (this.angle > 179.5 && this.angle < 180.5) ||
-      (this.angle > 269 && this.angle < 271))
+      (this.angle > 175 && this.angle < 185) ||
+      (this.angle > 269.5 && this.angle < 270.5))
     ) {
       this.angle += [-1, 1][Math.floor(Math.random() * 2)]
     } else {
@@ -133,6 +149,11 @@ class Shark {
     this.setSpeed(0);
     this.setFrame(0);
     this.launching = true;
+  }
+
+  playChomp() {
+    let chomp = this.chompSounds[Math.floor(Math.random() * this.chompSounds.length)];
+    chomp.play();
   }
 }
 

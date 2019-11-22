@@ -34,6 +34,7 @@ class Sealife {
       ) < shark.size
     ) {
       shark.calcAngle('corner', {x: this.x1, y: this.y1});
+      shark.playChomp();
       this.injure();
     } else if ( // Corner collision, upper right
       (shark.pos.x > this.x2) && (shark.pos.y < this.y1)
@@ -43,6 +44,7 @@ class Sealife {
       ) < shark.size
     ) {
       shark.calcAngle('corner', {x: this.x2, y: this.y1});
+      shark.playChomp();
       this.injure();
     } else if ( // Corner collision, lower left
       (shark.pos.x < this.x1) && (shark.pos.y > this.y2)
@@ -52,6 +54,7 @@ class Sealife {
       ) < shark.size
     ) {
       shark.calcAngle('corner', {x: this.x1, y: this.y2});
+      shark.playChomp();
       this.injure();
     } else if ( // Corner collision, lower right
     (shark.pos.x > this.x2) && (shark.pos.y > this.y2)
@@ -61,6 +64,7 @@ class Sealife {
       ) < shark.size
     ) {
       shark.calcAngle('corner', {x: this.x2, y: this.y2});
+      shark.playChomp();
       this.injure();
     } else if ( // Left and right side collision
       ((shark.vel.x > 0 && Math.abs(shark.pos.x - this.x1) < shark.size) ||
@@ -68,6 +72,7 @@ class Sealife {
       shark.pos.y > this.y1 && shark.pos.y < this.y2
     ) {
       shark.calcAngle('vel x mirror');
+      shark.playChomp();
       this.injure();
     } else if ( // Top and bottom side collision
       ((shark.vel.y > 0 && Math.abs(shark.pos.y - this.y1) < shark.size) ||
@@ -75,6 +80,7 @@ class Sealife {
       shark.pos.x > this.x1 && shark.pos.x < this.x2
     ) {
       shark.calcAngle('vel y mirror');
+      shark.playChomp();
       this.injure();
     }
   }
