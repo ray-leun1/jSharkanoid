@@ -8,9 +8,21 @@ class Sealife {
     this.y1 = options.posNommable.y;
     this.x2 = this.x1 + options.sizeNommable.width;
     this.y2 = this.y1 + options.sizeNommable.height;
-    this.hp = Math.ceil(this.sizeImage.width / 16);
+    this.hp = Math.ceil(Math.max(this.sizeImage.width, this.sizeImage.height) / 16);
     this.image = new Image();
     this.image.src = options.filename;
+
+    if (Math.max(this.sizeImage.width, this.sizeImage.height) <= 8) {
+      this.class = 'smol';
+    } else if (Math.max(this.sizeImage.width, this.sizeImage.height) <= 16) {
+      this.class = 'medium';
+    } else if (Math.max(this.sizeImage.width, this.sizeImage.height) <= 32) {
+      this.class = 'large';
+    } else if (Math.max(this.sizeImage.width, this.sizeImage.height) <= 64) {
+      this.class = 'huge';
+    } else if (Math.max(this.sizeImage.width, this.sizeImage.height) <= 128) {
+      this.class = 'duck';
+    }
   }
 
   collision(shark) {
@@ -23,6 +35,7 @@ class Sealife {
     ) {
       console.log('Upper left corner collision');
       shark.calcAngle('corner', {x: this.x1, y: this.y1});
+      this.injure();
     } else if ( // Corner collision, upper right
       (shark.pos.x > this.x2) && (shark.pos.y < this.y1)
       && Math.sqrt(
@@ -32,6 +45,7 @@ class Sealife {
     ) {
       console.log('Upper right corner collision');
       shark.calcAngle('corner', {x: this.x2, y: this.y1});
+      this.injure();
     } else if ( // Corner collision, lower left
       (shark.pos.x < this.x1) && (shark.pos.y > this.y2)
       && Math.sqrt(
@@ -41,6 +55,7 @@ class Sealife {
     ) {
       console.log('Lower left corner collision');
       shark.calcAngle('corner', {x: this.x1, y: this.y2});
+      this.injure();
     } else if ( // Corner collision, lower right
     (shark.pos.x > this.x2) && (shark.pos.y > this.y2)
       && Math.sqrt(
@@ -50,6 +65,7 @@ class Sealife {
     ) {
       console.log('Lower right corner collision');
       shark.calcAngle('corner', {x: this.x2, y: this.y2});
+      this.injure();
     } else if ( // Left and right side collision
       ((shark.vel.x > 0 && Math.abs(shark.pos.x - this.x1) < shark.size) ||
       (shark.vel.x < 0 && Math.abs(shark.pos.x - this.x2) < shark.size)) &&
@@ -83,7 +99,7 @@ class Sealife {
   }
 
   injure() {
-    this.hp -= 1;
+    --this.hp;
     if (this.hp <= 0) this.aquarium.destroy(this);
   }
 }

@@ -12,6 +12,7 @@ class Shark {
     this.width = 110;
     this.height = 45;
     this.frame = 0;
+    this.launching = true;
   }
 
   setPos(pos) {
@@ -52,11 +53,11 @@ class Shark {
   }
 
   setAngle(angle) {
-    if (this.speed !== 0 &&
-      ((this.angle > 359.5 && this.angle < 0.5) ||
+    if (!this.launching &&
+      ((this.angle > 359 && this.angle < 1) ||
       (this.angle > 89.5 && this.angle < 90.5) ||
       (this.angle > 179.5 && this.angle < 180.5) ||
-      (this.angle > 269.5 && this.angle < 270.5))
+      (this.angle > 269 && this.angle < 271))
     ) {
       this.angle += [-1, 1][Math.floor(Math.random() * 2)]
     } else {
@@ -68,6 +69,10 @@ class Shark {
   setVel() {
     this.vel.x = this.speed * Math.cos(Math.PI * this.angle / 180);
     this.vel.y = this.speed * Math.sin(Math.PI * this.angle / 180);
+  }
+
+  setHP(hp) {
+    this.hp = hp;
   }
 
   setFrame(frame) {
@@ -84,12 +89,9 @@ class Shark {
   }
 
   draw(ctx) {
-    if (this.speed === 0) {
-      this.reset();
-    };
+    if (this.launching) this.reset();
 
     let localCoords = this.localPos();
-    this.frame += 1;
 
     this.image.onload = () => {
       ctx.save();
@@ -120,8 +122,8 @@ class Shark {
   }
 
   injure() {
-    this.hp -= 1;
-    this.reset();
+    --this.hp;
+    if (this.hp >= 1) this.reset();
   }
 
   reset() {
@@ -130,8 +132,8 @@ class Shark {
       y: this.launchpad.y1 - 10
     });
     this.setSpeed(0);
-    this.setAngle(270);
     this.setFrame(0);
+    this.launching = true;
   }
 }
 
