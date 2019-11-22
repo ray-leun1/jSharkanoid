@@ -24,6 +24,10 @@ class Aquarium {
     this.sidebarAssets.duck.src = './img/sealife/128x29_110x22_8x3_Duck.png';
     this.sidebarAssets.life.src = './img/SharkIcon.png';
     this.sidebarAssets.death.src = './img/SharkDeath.png';
+    this.bgm = new Audio('./sound/sunken-suite.mp3');
+    this.bgm.loop = true;
+    this.bgm.currentTime = 0;
+    this.bgm.volume = 0.05;
     this.frame = 0;
     this.launchpad = new Launchpad({width: Aquarium.WIDTH, height: Aquarium.HEIGHT});
     this.shark = new Shark(this.launchpad);
@@ -200,6 +204,8 @@ class Aquarium {
   mouseClick(e) {
     let mouseX = e.clientX - this.offset.x;
     let mouseY = e.clientY - this.offset.y;
+
+    if (!this.bgm.ended) this.bgm.play();
 
     if (mouseX <= Aquarium.WIDTH && this.shark.launching && !this.paused && !this.gameover) {
       this.shark.launching = false;
@@ -463,6 +469,8 @@ class Aquarium {
     this.ctx.fillText('game-developer-studio', 116, 340);
     this.ctx.fillText('Sea Nommables: https://rapidpunches.itch.io/', 20, 360);
     this.ctx.fillText('Shark: https://opengameart.org/users/pillarist', 20, 380);
+    this.ctx.fillText('BGM: "Sunken Suite" (djpretzel / https://ocremix.org)', 20, 400);
+    this.ctx.fillText('Chomp Sounds: https://opengameart.org/users/darsycho', 20, 420);
 
     this.ctx.beginPath();
     this.ctx.moveTo(474, 553);
