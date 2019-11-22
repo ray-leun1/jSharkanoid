@@ -39,6 +39,7 @@ class Aquarium {
     this.lostHP = 0;
     this.mouseLeftDown = false;
     this.paused = false;
+    this.about = false;
     this.gameover = false;
 
     this.animate = this.animate.bind(this);
@@ -71,11 +72,12 @@ class Aquarium {
   generateSealife() {
     let genList = [
       'anchovy', 'crab1', 'seahorse1', 'grunt', 'croaker', 'corepod',
-      'sandlance', 'sardine', 'herring', 'pollock', 'crab2', 'butter',
-      'mantaRay', 'jellyfish1', 'jellyfish2', 'seahorse2', 'jellyfish3',
-      'crab3', 'jellyfish4', 'halfbeak', 'sunfish1', 'sunfish2', 'crab4',
-      'anglerfish', 'polarBear1', 'polarBear2', 'gastropod1', 'gastropod2',
-      'pufferfish', 'whale1', 'whale2', 'swordfish', 'baiji', 'duck'
+      'sandlance', 'sardine', 'herring', 'pollock', 'crab2',
+      'butter', 'mantaRay', 'jellyfish1', 'jellyfish2', 'seahorse2',
+      'jellyfish3', 'crab3', 'jellyfish4', 'halfbeak', 'sunfish1',
+      'sunfish2', 'crab4', 'anglerfish', 'polarBear1', 'polarBear2',
+      'gastropod1', 'gastropod2', 'pufferfish', 'whale1', 'whale2',
+      'swordfish', 'baiji', 'duck'
     ]
 
     genList.forEach((nommable, idx) => {
@@ -194,8 +196,12 @@ class Aquarium {
     if (this.ctx.isPointInPath(mouseX, mouseY)) {
       if (mouseX < Aquarium.WIDTH) {
         this.reset();
-      } else if (mouseX > Aquarium.WIDTH) {
+      } else if (mouseX >= 474 && mouseX < 547) {
+        this.paused = this.about ? false : true;
+        this.about = this.about ? false : true;
+      } else if (mouseX > 547 && mouseX <= 577) {
         this.paused = this.paused ? false : true;
+        this.about = false;
       }
     }
   }
@@ -204,7 +210,11 @@ class Aquarium {
     let mouseX = e.clientX - this.offset.x;
     let mouseY = e.clientY - this.offset.y;
 
-    if (mouseX <= Aquarium.WIDTH && this.shark.launching && !this.paused && !this.gameover) this.mouseLeftDown = true;
+    if (mouseX <= Aquarium.WIDTH
+      && this.shark.launching
+      && !this.paused
+      && !this.gameover
+    ) this.mouseLeftDown = true;
   }
 
   mouseUp(e) {
@@ -226,8 +236,9 @@ class Aquarium {
     this.launchpad.draw(this.ctx);
     this.sealife.forEach(consumable => consumable.draw(this.ctx));
     this.drawSidebar();
-    this.drawBtn();
-    
+    this.drawBtns();
+
+    if (this.about) this.drawAbout();
     if (this.gameover) this.drawGameover();
   }
 
@@ -283,8 +294,13 @@ class Aquarium {
     this.shark.reset();
   }
 
-  drawBtn() {
+  drawBtns() {
     this.ctx.fillStyle = '#064273';
+
+    this.ctx.font = 'bold 18px sans-serif';
+    this.ctx.textAlign = 'start';
+    this.ctx.fillText('About', 480, 575);
+
 
     if (this.paused) {
       this.ctx.beginPath();
@@ -317,6 +333,19 @@ class Aquarium {
       this.ctx.lineTo(550, 580);
       this.ctx.closePath();
     }
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(474, 553);
+    this.ctx.lineTo(577, 553);
+    this.ctx.lineTo(577, 583);
+    this.ctx.lineTo(547, 583);
+    this.ctx.lineTo(547, 553);
+    this.ctx.lineTo(547, 583);
+    this.ctx.lineTo(474, 583);
+    this.ctx.closePath();
+    this.ctx.strokeStyle = '#064273';
+    this.ctx.lineWidth = 2;
+    this.ctx.stroke();
   }
 
   drawSidebar() {
@@ -353,7 +382,7 @@ class Aquarium {
       if (this.shark.hp >= 5) this.ctx.drawImage(this.sidebarAssets.life, 506, 445, 36, 36);
       if (this.shark.hp >= 6) this.ctx.drawImage(this.sidebarAssets.life, 547, 445, 36, 36);
     }
-    this.drawBtn();
+    this.drawBtns();
   }
 
   drawGameover() {
@@ -389,6 +418,48 @@ class Aquarium {
     this.ctx.lineTo(290, 310);
     this.ctx.lineTo(290, 332);
     this.ctx.lineTo(162, 332);
+    this.ctx.closePath();
+  }
+
+  drawAbout() {
+    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+    this.ctx.beginPath();
+    this.ctx.moveTo(0, 0);
+    this.ctx.lineTo(Aquarium.WIDTH, 0);
+    this.ctx.lineTo(Aquarium.WIDTH, Aquarium.CANVAS_HEIGHT);
+    this.ctx.lineTo(0, Aquarium.CANVAS_HEIGHT);
+    this.ctx.closePath();
+    this.ctx.fill();
+    
+    this.ctx.textAlign = 'start';
+    this.ctx.fillStyle = '#def3f6'
+    this.ctx.font = 'bold 16px sans-serif';
+    this.ctx.fillText('About', 20, 30);
+    this.ctx.fillText('Controls', 20, 150);
+    this.ctx.fillText('Credits', 20, 300);
+
+    this.ctx.font = '14px sans-serif';
+    this.ctx.fillText('The ocean is brimming with peacefully coexisting life!', 20, 50);
+    this.ctx.fillText('Help your shark consume them all, but prevent it from', 20, 70);
+    this.ctx.fillText('swimming too deep, or its ravenous hunger will drag it', 20, 90);
+    this.ctx.fillText('down into the painful depths!', 20, 110);
+
+    this.ctx.fillText('Use the mouse to position the launchpad.', 20, 170);
+    this.ctx.fillText('Click and hold to aim your shark.', 20, 190);
+    this.ctx.fillText('Release to launch!', 20, 210);
+    this.ctx.fillText('Continue using the launchpad to ', 20, 240);
+    this.ctx.fillText('redirect your shark away from the deep!', 20, 260);
+
+    this.ctx.fillText('Background: https://opengameart.org/users/', 20, 320);  
+    this.ctx.fillText('game-developer-studio', 116, 340);
+    this.ctx.fillText('Sea Nommables: https://rapidpunches.itch.io/', 20, 360);
+    this.ctx.fillText('Shark: https://opengameart.org/users/pillarist', 20, 380);
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(474, 553);
+    this.ctx.lineTo(577, 553);
+    this.ctx.lineTo(577, 583);
+    this.ctx.lineTo(474, 583);
     this.ctx.closePath();
   }
 }
