@@ -2,7 +2,7 @@ class Launchpad {
   constructor(aquarium) {
     this.aquarium = aquarium;
     this.image = new Image();
-    this.image.src = '../img/Launchpad.png';
+    this.image.src = './img/Launchpad.png';
     this.size = {width: 80, height: 14};
     this.x1 = (aquarium.width / 2) - (this.size.width / 2);
     this.y1 = aquarium.height - 16 - this.size.height;

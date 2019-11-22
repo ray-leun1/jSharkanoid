@@ -17,13 +17,13 @@ class Aquarium {
       life: new Image(),
       death: new Image()
     }
-    this.sidebarAssets.smol.src = '../img/sealife/8x5_7x3_0x1_anchovy.png';
-    this.sidebarAssets.medium.src = '../img/sealife/16x15_10x9_1x3_butter.png';
-    this.sidebarAssets.large.src = '../img/sealife/30x30_24x24_5x3_pufferfish.png';
-    this.sidebarAssets.huge.src = '../img/sealife/62x32_48x16_11x4_whale.png';
-    this.sidebarAssets.duck.src = '../img/sealife/128x29_110x22_8x3_Duck.png';
-    this.sidebarAssets.life.src = '../img/SharkIcon.png';
-    this.sidebarAssets.death.src = '../img/SharkDeath.png';
+    this.sidebarAssets.smol.src = './img/sealife/8x5_7x3_0x1_anchovy.png';
+    this.sidebarAssets.medium.src = './img/sealife/16x15_10x9_1x3_butter.png';
+    this.sidebarAssets.large.src = './img/sealife/30x30_24x24_5x3_pufferfish.png';
+    this.sidebarAssets.huge.src = './img/sealife/62x32_48x16_11x4_whale.png';
+    this.sidebarAssets.duck.src = './img/sealife/128x29_110x22_8x3_Duck.png';
+    this.sidebarAssets.life.src = './img/SharkIcon.png';
+    this.sidebarAssets.death.src = './img/SharkDeath.png';
     this.frame = 0;
     this.launchpad = new Launchpad({width: Aquarium.WIDTH, height: Aquarium.HEIGHT});
     this.shark = new Shark(this.launchpad);
@@ -469,6 +469,6 @@ Aquarium.HEIGHT = 600;
 Aquarium.CANVAS_WIDTH = 600;
 Aquarium.CANVAS_HEIGHT = 600;
 Aquarium.BG = new Image(Aquarium.WIDTH, Aquarium.HEIGHT);
-Aquarium.BG.src = "../img/background.png";
+Aquarium.BG.src = "./img/background.png";
 
 module.exports = Aquarium;
