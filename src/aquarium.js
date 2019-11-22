@@ -39,6 +39,7 @@ class Aquarium {
     this.lostHP = 0;
     this.mouseLeftDown = false;
     this.paused = false;
+    this.about = false;
     this.gameover = false;
 
     this.animate = this.animate.bind(this);
@@ -71,11 +72,12 @@ class Aquarium {
   generateSealife() {
     let genList = [
       'anchovy', 'crab1', 'seahorse1', 'grunt', 'croaker', 'corepod',
-      'sandlance', 'sardine', 'herring', 'pollock', 'crab2', 'butter',
-      'mantaRay', 'jellyfish1', 'jellyfish2', 'seahorse2', 'jellyfish3',
-      'crab3', 'jellyfish4', 'halfbeak', 'sunfish1', 'sunfish2', 'crab4',
-      'anglerfish', 'polarBear1', 'polarBear2', 'gastropod1', 'gastropod2',
-      'pufferfish', 'whale1', 'whale2', 'swordfish', 'baiji', 'duck'
+      'sandlance', 'sardine', 'herring', 'pollock', 'crab2',
+      'butter', 'mantaRay', 'jellyfish1', 'jellyfish2', 'seahorse2',
+      'jellyfish3', 'crab3', 'jellyfish4', 'halfbeak', 'sunfish1',
+      'sunfish2', 'crab4', 'anglerfish', 'polarBear1', 'polarBear2',
+      'gastropod1', 'gastropod2', 'pufferfish', 'whale1', 'whale2',
+      'swordfish', 'baiji', 'duck'
     ]
 
     genList.forEach((nommable, idx) => {
@@ -194,8 +196,11 @@ class Aquarium {
     if (this.ctx.isPointInPath(mouseX, mouseY)) {
       if (mouseX < Aquarium.WIDTH) {
         this.reset();
-      } else if (mouseX > Aquarium.WIDTH) {
+      } else if (mouseX > 547 && mouseX <= 577) {
         this.paused = this.paused ? false : true;
+      } else if (mouseX >= 474 && mouseX < 547) {
+        this.paused = true;
+        this.about = true;
       }
     }
   }
@@ -283,8 +288,13 @@ class Aquarium {
     this.shark.reset();
   }
 
-  drawBtn() {
+  drawBtns() {
     this.ctx.fillStyle = '#064273';
+
+    this.ctx.font = 'bold 18px sans-serif';
+    this.ctx.textAlign = 'start';
+    this.ctx.fillText('About', 480, 575);
+
 
     if (this.paused) {
       this.ctx.beginPath();
@@ -317,6 +327,19 @@ class Aquarium {
       this.ctx.lineTo(550, 580);
       this.ctx.closePath();
     }
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(474, 553);
+    this.ctx.lineTo(577, 553);
+    this.ctx.lineTo(577, 583);
+    this.ctx.lineTo(547, 583);
+    this.ctx.lineTo(547, 553);
+    this.ctx.lineTo(547, 583);
+    this.ctx.lineTo(474, 583);
+    this.ctx.closePath();
+    this.ctx.strokeStyle = '#064273';
+    this.ctx.lineWidth = 2;
+    this.ctx.stroke();
   }
 
   drawSidebar() {
@@ -353,10 +376,10 @@ class Aquarium {
       if (this.shark.hp >= 5) this.ctx.drawImage(this.sidebarAssets.life, 506, 445, 36, 36);
       if (this.shark.hp >= 6) this.ctx.drawImage(this.sidebarAssets.life, 547, 445, 36, 36);
     }
-    this.drawBtn();
+    this.drawBtns();
   }
 
-  drawGameover() {
+  drawShading() {
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
     this.ctx.beginPath();
     this.ctx.moveTo(0, 0);
@@ -374,6 +397,10 @@ class Aquarium {
     this.ctx.lineTo(Aquarium.WIDTH, Aquarium.CANVAS_HEIGHT);
     this.ctx.closePath();
     this.ctx.fill();
+  }
+
+  drawGameover() {
+    this.drawShading();
 
     this.ctx.font = 'bold 56px sans-serif';
     this.ctx.fillStyle = '#ffffff';
@@ -390,6 +417,12 @@ class Aquarium {
     this.ctx.lineTo(290, 332);
     this.ctx.lineTo(162, 332);
     this.ctx.closePath();
+  }
+
+  drawAbout() {
+    this.drawShading();
+
+    
   }
 }
 
