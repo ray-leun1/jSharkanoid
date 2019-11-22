@@ -1,17 +1,17 @@
 const Aquarium = require('./aquarium');
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   const canvasEl = document.getElementsByTagName('canvas')[0];
-  canvasEl.width = Aquarium.WIDTH;
-  canvasEl.height = Aquarium.HEIGHT;
+  canvasEl.width = Aquarium.CANVAS_WIDTH;
+  canvasEl.height = Aquarium.CANVAS_HEIGHT;
 
-  const ctxMain = canvasEl.getContext('2d');
-  ctxMain.imageSmoothingEnabled = false;
-  const ctxBtn = canvasEl.getContext('2d');
-  ctxBtn.imageSmoothingEnabled = false;
+  const context = canvasEl.getContext('2d');
+  context.imageSmoothingEnabled = false;
   
-  const aquarium = new Aquarium(ctxMain);
+  const aquarium = new Aquarium(canvasEl, context);
   canvasEl.addEventListener('mousemove', e => aquarium.mousePos(e));
-  canvasEl.addEventListener('click', e => aquarium.launch(e));
+  canvasEl.addEventListener('click', e => aquarium.mouseClick(e));
+  canvasEl.addEventListener('mousedown', e => aquarium.mouseDown(e));
+  canvasEl.addEventListener('mouseup', e => aquarium.mouseUp(e));
   aquarium.start();
 });
