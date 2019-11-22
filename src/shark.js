@@ -8,7 +8,7 @@ class Shark {
     this.angle = 270;
     this.hp = 3;
     this.image = new Image();
-    this.image.src = '../img/SharkSpriteSheet_110x45.png';
+    this.image.src = './img/SharkSpriteSheet_110x45.png';
     this.width = 110;
     this.height = 45;
     this.frame = 0;
@@ -46,7 +46,6 @@ class Shark {
       } else if (newVel.x > 1 && newVel.y < 1) {
         newAngle += 360;
       }
-      console.log({dVel: params.vel * params.friction, oldAngle: this.angle, newAngle})
       this.setAngle(newAngle);
       this.calcAngle('vel y mirror');
     }

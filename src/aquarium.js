@@ -17,17 +17,19 @@ class Aquarium {
       life: new Image(),
       death: new Image()
     }
-    this.sidebarAssets.smol.src = '../img/sealife/8x5_7x3_0x1_anchovy.png';
-    this.sidebarAssets.medium.src = '../img/sealife/16x15_10x9_1x3_butter.png';
-    this.sidebarAssets.large.src = '../img/sealife/30x30_24x24_5x3_pufferfish.png';
-    this.sidebarAssets.huge.src = '../img/sealife/62x32_48x16_11x4_whale.png';
-    this.sidebarAssets.duck.src = '../img/sealife/128x29_110x22_8x3_Duck.png';
-    this.sidebarAssets.life.src = '../img/SharkIcon.png';
-    this.sidebarAssets.death.src = '../img/SharkDeath.png';
+    this.sidebarAssets.smol.src = './img/sealife/8x5_7x3_0x1_anchovy.png';
+    this.sidebarAssets.medium.src = './img/sealife/16x15_10x9_1x3_butter.png';
+    this.sidebarAssets.large.src = './img/sealife/30x30_24x24_5x3_pufferfish.png';
+    this.sidebarAssets.huge.src = './img/sealife/62x32_48x16_11x4_whale.png';
+    this.sidebarAssets.duck.src = './img/sealife/128x29_110x22_8x3_Duck.png';
+    this.sidebarAssets.life.src = './img/SharkIcon.png';
+    this.sidebarAssets.death.src = './img/SharkDeath.png';
     this.frame = 0;
     this.launchpad = new Launchpad({width: Aquarium.WIDTH, height: Aquarium.HEIGHT});
     this.shark = new Shark(this.launchpad);
     this.sealife = [];
+    this.prevNommables = 0;
+    this.numNommables = 0;
     this.nommed = {
       smol: 0,
       medium: 0,
@@ -41,6 +43,8 @@ class Aquarium {
     this.paused = false;
     this.about = false;
     this.gameover = false;
+    this.gameWon = false;
+    this.numWins = 0;
 
     this.animate = this.animate.bind(this);
     window.onscroll = () => this.getOffset();
@@ -126,6 +130,15 @@ class Aquarium {
         nommable
       ))
     })
+
+    // this.sealife.push(Sealife.create(
+    //   this,
+    //   {x: 200, y: 200},
+    //   1,
+    //   genList[2]
+    // ))
+
+    this.numNommables = this.sealife.length;
   }
 
   calcSpeedAdjust() {
@@ -139,7 +152,7 @@ class Aquarium {
   }
 
   calcSharkSpeed() {
-    return 5 + this.calcSpeedAdjust() - this.prevSpeedAdjust;
+    return 5 + this.calcSpeedAdjust() - this.prevSpeedAdjust + (this.numWins * 0.5);
   }
 
   calcGainedHP() {
@@ -195,7 +208,11 @@ class Aquarium {
 
     if (this.ctx.isPointInPath(mouseX, mouseY)) {
       if (mouseX < Aquarium.WIDTH) {
-        this.reset();
+        if (this.gameWon) {
+          this.continue();
+        } else if (this.gameover) {
+          this.reset();
+        }
       } else if (mouseX >= 474 && mouseX < 547) {
         this.paused = this.about ? false : true;
         this.about = this.about ? false : true;
@@ -214,6 +231,7 @@ class Aquarium {
       && this.shark.launching
       && !this.paused
       && !this.gameover
+      && !this.gameWon
     ) this.mouseLeftDown = true;
   }
 
@@ -239,13 +257,14 @@ class Aquarium {
     this.drawBtns();
 
     if (this.about) this.drawAbout();
+    if (this.gameWon) this.drawGameWon();
     if (this.gameover) this.drawGameover();
   }
 
   animate() {
     this.ctx.clearRect(0, 0, Aquarium.WIDTH, Aquarium.HEIGHT);
 
-    if (!this.paused && !this.gameover) {
+    if (!this.paused && !this.gameover && !this.gameWon) {
       ++this.frame;
       this.shark.setFrame(Math.floor(this.frame / 4) % 7)
   
@@ -264,13 +283,28 @@ class Aquarium {
 
     this.draw();
     
-    if (this.shark.hp < 1) this.gameover = true;
+    if (Object.values(this.nommed).reduce((acc, curr) => acc + curr)
+      - this.prevNommables === this.numNommables && !this.gameWon) {
+      ++this.numWins;
+      this.gameWon = true;
+    }
+    if (this.shark.hp < 1 && !this.gameover) this.gameover = true;
   }
 
   start() {
     this.reset();
 
     setInterval(this.animate, 16.67);
+  }
+
+  continue() {
+    this.prevNommables += this.numNommables;
+    this.numNommables = 0;
+    this.mouseLeftDown = false;
+    this.paused = false;
+    this.gameWon = false;
+    this.generateSealife();
+    this.shark.reset();
   }
 
   reset() {
@@ -285,6 +319,8 @@ class Aquarium {
       huge: 0,
       duck: 0
     }
+    this.prevNommables = 0;
+    this.numNommables = 0;
     this.prevSpeedAdjust = 0;
     this.lostHP = 0;
     this.mouseLeftDown = false;
@@ -350,8 +386,14 @@ class Aquarium {
 
   drawSidebar() {
     this.ctx.fillStyle = 'rgba(127,205,255, 0.5)';
-    this.ctx.rect(Aquarium.WIDTH, 0, Aquarium.CANVAS_WIDTH, Aquarium.CANVAS_HEIGHT);
+    this.ctx.beginPath();
+    this.ctx.moveTo(Aquarium.WIDTH, 0);
+    this.ctx.lineTo(Aquarium.CANVAS_WIDTH, 0);
+    this.ctx.lineTo(Aquarium.CANVAS_WIDTH, Aquarium.CANVAS_HEIGHT);
+    this.ctx.lineTo(Aquarium.WIDTH, Aquarium.CANVAS_HEIGHT);
+    this.ctx.closePath();
     this.ctx.fill();
+
     this.ctx.fillStyle = '#064273';
     this.ctx.font = 'bold 19px sans-serif';
     this.ctx.textAlign = 'center';
@@ -369,8 +411,10 @@ class Aquarium {
     this.ctx.drawImage(this.sidebarAssets.huge, 500, 175, 0.8 * 62, 0.8 * 32);
     this.ctx.drawImage(this.sidebarAssets.duck, 500, 215, 0.7 * 128, 0.7 * 29);
     this.ctx.textAlign = 'center'
+    
     this.ctx.fillText('Shark Speed', (Aquarium.CANVAS_WIDTH + Aquarium.WIDTH) / 2, 300);
     this.ctx.fillText(this.calcSharkSpeed().toFixed(1), (Aquarium.CANVAS_WIDTH + Aquarium.WIDTH) / 2, 330);
+    
     this.ctx.fillText('Shark Lives', (Aquarium.CANVAS_WIDTH + Aquarium.WIDTH) / 2, 390);
     if (this.shark.hp <= 0) {
       this.ctx.drawImage(this.sidebarAssets.death, 476, 405);
@@ -382,7 +426,67 @@ class Aquarium {
       if (this.shark.hp >= 5) this.ctx.drawImage(this.sidebarAssets.life, 506, 445, 36, 36);
       if (this.shark.hp >= 6) this.ctx.drawImage(this.sidebarAssets.life, 547, 445, 36, 36);
     }
+
     this.drawBtns();
+  }
+
+  drawAbout() {
+    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+    this.ctx.beginPath();
+    this.ctx.moveTo(0, 0);
+    this.ctx.lineTo(Aquarium.WIDTH, 0);
+    this.ctx.lineTo(Aquarium.WIDTH, Aquarium.CANVAS_HEIGHT);
+    this.ctx.lineTo(0, Aquarium.CANVAS_HEIGHT);
+    this.ctx.closePath();
+    this.ctx.fill();
+
+    this.ctx.textAlign = 'start';
+    this.ctx.fillStyle = '#def3f6'
+    this.ctx.font = 'bold 16px sans-serif';
+    this.ctx.fillText('About', 20, 30);
+    this.ctx.fillText('Controls', 20, 150);
+    this.ctx.fillText('Credits', 20, 300);
+
+    this.ctx.font = '14px sans-serif';
+    this.ctx.fillText('The ocean is brimming with peacefully coexisting life!', 20, 50);
+    this.ctx.fillText('Help your shark consume them all, but prevent it from', 20, 70);
+    this.ctx.fillText('swimming too deep, or its ravenous hunger will drag it', 20, 90);
+    this.ctx.fillText('down into the painful depths!', 20, 110);
+
+    this.ctx.fillText('Use the mouse to position the launchpad.', 20, 170);
+    this.ctx.fillText('Click and hold to aim your shark.', 20, 190);
+    this.ctx.fillText('Release to launch!', 20, 210);
+    this.ctx.fillText('Continue using the launchpad to ', 20, 240);
+    this.ctx.fillText('redirect your shark away from the deep!', 20, 260);
+
+    this.ctx.fillText('Background: https://opengameart.org/users/', 20, 320);
+    this.ctx.fillText('game-developer-studio', 116, 340);
+    this.ctx.fillText('Sea Nommables: https://rapidpunches.itch.io/', 20, 360);
+    this.ctx.fillText('Shark: https://opengameart.org/users/pillarist', 20, 380);
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(474, 553);
+    this.ctx.lineTo(577, 553);
+    this.ctx.lineTo(577, 583);
+    this.ctx.lineTo(474, 583);
+    this.ctx.closePath();
+  }
+
+  drawGameWon() {
+    this.ctx.font = 'bold 56px sans-serif';
+    this.ctx.fillStyle = '#def3f6'
+    this.ctx.textAlign = 'center';
+    this.ctx.fillText('ATE \'EM', Aquarium.WIDTH / 2, Aquarium.HEIGHT / 2 - 24);
+
+    this.ctx.font = 'bold 32px monospace';
+    this.ctx.fillText('Nom More', Aquarium.WIDTH / 2, Aquarium.HEIGHT / 2 + 32);
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(151, 310);
+    this.ctx.lineTo(300, 310);
+    this.ctx.lineTo(300, 332);
+    this.ctx.lineTo(151, 332);
+    this.ctx.closePath();
   }
 
   drawGameover() {
@@ -420,48 +524,6 @@ class Aquarium {
     this.ctx.lineTo(162, 332);
     this.ctx.closePath();
   }
-
-  drawAbout() {
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    this.ctx.beginPath();
-    this.ctx.moveTo(0, 0);
-    this.ctx.lineTo(Aquarium.WIDTH, 0);
-    this.ctx.lineTo(Aquarium.WIDTH, Aquarium.CANVAS_HEIGHT);
-    this.ctx.lineTo(0, Aquarium.CANVAS_HEIGHT);
-    this.ctx.closePath();
-    this.ctx.fill();
-    
-    this.ctx.textAlign = 'start';
-    this.ctx.fillStyle = '#def3f6'
-    this.ctx.font = 'bold 16px sans-serif';
-    this.ctx.fillText('About', 20, 30);
-    this.ctx.fillText('Controls', 20, 150);
-    this.ctx.fillText('Credits', 20, 300);
-
-    this.ctx.font = '14px sans-serif';
-    this.ctx.fillText('The ocean is brimming with peacefully coexisting life!', 20, 50);
-    this.ctx.fillText('Help your shark consume them all, but prevent it from', 20, 70);
-    this.ctx.fillText('swimming too deep, or its ravenous hunger will drag it', 20, 90);
-    this.ctx.fillText('down into the painful depths!', 20, 110);
-
-    this.ctx.fillText('Use the mouse to position the launchpad.', 20, 170);
-    this.ctx.fillText('Click and hold to aim your shark.', 20, 190);
-    this.ctx.fillText('Release to launch!', 20, 210);
-    this.ctx.fillText('Continue using the launchpad to ', 20, 240);
-    this.ctx.fillText('redirect your shark away from the deep!', 20, 260);
-
-    this.ctx.fillText('Background: https://opengameart.org/users/', 20, 320);  
-    this.ctx.fillText('game-developer-studio', 116, 340);
-    this.ctx.fillText('Sea Nommables: https://rapidpunches.itch.io/', 20, 360);
-    this.ctx.fillText('Shark: https://opengameart.org/users/pillarist', 20, 380);
-
-    this.ctx.beginPath();
-    this.ctx.moveTo(474, 553);
-    this.ctx.lineTo(577, 553);
-    this.ctx.lineTo(577, 583);
-    this.ctx.lineTo(474, 583);
-    this.ctx.closePath();
-  }
 }
 
 Aquarium.WIDTH = 450;
@@ -469,6 +531,6 @@ Aquarium.HEIGHT = 600;
 Aquarium.CANVAS_WIDTH = 600;
 Aquarium.CANVAS_HEIGHT = 600;
 Aquarium.BG = new Image(Aquarium.WIDTH, Aquarium.HEIGHT);
-Aquarium.BG.src = "../img/background.png";
+Aquarium.BG.src = "./img/background.png";
 
 module.exports = Aquarium;

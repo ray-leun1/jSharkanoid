@@ -33,7 +33,6 @@ class Sealife {
         + Math.pow(shark.pos.y - this.y1, 2)
       ) < shark.size
     ) {
-      console.log('Upper left corner collision');
       shark.calcAngle('corner', {x: this.x1, y: this.y1});
       this.injure();
     } else if ( // Corner collision, upper right
@@ -43,7 +42,6 @@ class Sealife {
         + Math.pow(shark.pos.y - this.y1, 2)
       ) < shark.size
     ) {
-      console.log('Upper right corner collision');
       shark.calcAngle('corner', {x: this.x2, y: this.y1});
       this.injure();
     } else if ( // Corner collision, lower left
@@ -53,7 +51,6 @@ class Sealife {
         + Math.pow(shark.pos.y - this.y2, 2)
       ) < shark.size
     ) {
-      console.log('Lower left corner collision');
       shark.calcAngle('corner', {x: this.x1, y: this.y2});
       this.injure();
     } else if ( // Corner collision, lower right
@@ -63,7 +60,6 @@ class Sealife {
         + Math.pow(shark.pos.y - this.y2, 2)
       ) < shark.size
     ) {
-      console.log('Lower right corner collision');
       shark.calcAngle('corner', {x: this.x2, y: this.y2});
       this.injure();
     } else if ( // Left and right side collision
@@ -71,7 +67,6 @@ class Sealife {
       (shark.vel.x < 0 && Math.abs(shark.pos.x - this.x2) < shark.size)) &&
       shark.pos.y > this.y1 && shark.pos.y < this.y2
     ) {
-      console.log('l/r collision')
       shark.calcAngle('vel x mirror');
       this.injure();
     } else if ( // Top and bottom side collision
@@ -79,7 +74,6 @@ class Sealife {
       (shark.vel.y < 0 && Math.abs(shark.pos.y - this.y2) < shark.size)) &&
       shark.pos.x > this.x1 && shark.pos.x < this.x2
     ) {
-      console.log('t/d collision')
       shark.calcAngle('vel y mirror');
       this.injure();
     }
@@ -151,7 +145,7 @@ Sealife.create = (aquarium, pos, scale, name) => {
 
   let options = {
     aquarium: aquarium,
-    filename: '../img/sealife/' + filename,
+    filename: './img/sealife/' + filename,
     posImage: pos,
     sizeImage: {
       width: scale * parseInt(sizeImage[0]),
