@@ -2,6 +2,7 @@ const Launchpad = require('./launchpad');
 const Shark = require('./shark');
 const Sealife = require('./sealife');
 const Sidebar = require('./sidebar');
+const About = require('./about');
 
 class Aquarium {
   constructor(canvas, ctx) {
@@ -18,6 +19,7 @@ class Aquarium {
     this.shark = new Shark(this.launchpad);
     this.sealife = [];
     this.sidebar = new Sidebar(Aquarium);
+    this.about = new About(Aquarium);
     this.prevNommables = 0;
     this.numNommables = 0;
     this.nommed = {
@@ -31,7 +33,6 @@ class Aquarium {
     this.lostHP = 0;
     this.mouseLeftDown = false;
     this.paused = false;
-    this.about = false;
     this.gameover = false;
     this.gameWon = false;
     this.numWins = 0;
@@ -207,11 +208,11 @@ class Aquarium {
           this.reset();
         }
       } else if (mouseX >= 474 && mouseX < 547) {
-        this.paused = this.about ? false : true;
-        this.about = this.about ? false : true;
+        this.paused = this.about.active ? false : true;
+        this.about.active = this.about.active ? false : true;
       } else if (mouseX > 547 && mouseX <= 577) {
         this.paused = this.paused ? false : true;
-        this.about = false;
+        this.about.active = false;
       }
     }
   }
@@ -248,7 +249,7 @@ class Aquarium {
     this.sealife.forEach(consumable => consumable.draw(this.ctx));
     this.sidebar.draw(this);
 
-    if (this.about) this.drawAbout();
+    if (this.about.active) this.about.draw(this.ctx);
     if (this.gameWon) this.drawGameWon();
     if (this.gameover) this.drawGameover();
   }
@@ -320,50 +321,6 @@ class Aquarium {
     this.gameover = false;
     this.generateSealife();
     this.shark.reset();
-  }
-
-  drawAbout() {
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    this.ctx.beginPath();
-    this.ctx.moveTo(0, 0);
-    this.ctx.lineTo(Aquarium.WIDTH, 0);
-    this.ctx.lineTo(Aquarium.WIDTH, Aquarium.CANVAS_HEIGHT);
-    this.ctx.lineTo(0, Aquarium.CANVAS_HEIGHT);
-    this.ctx.closePath();
-    this.ctx.fill();
-
-    this.ctx.textAlign = 'start';
-    this.ctx.fillStyle = '#def3f6'
-    this.ctx.font = 'bold 16px sans-serif';
-    this.ctx.fillText('About', 20, 30);
-    this.ctx.fillText('Controls', 20, 150);
-    this.ctx.fillText('Credits', 20, 300);
-
-    this.ctx.font = '14px sans-serif';
-    this.ctx.fillText('The ocean is brimming with peacefully coexisting life!', 20, 50);
-    this.ctx.fillText('Help your shark consume them all, but prevent it from', 20, 70);
-    this.ctx.fillText('swimming too deep, or its ravenous hunger will drag it', 20, 90);
-    this.ctx.fillText('down into the painful depths!', 20, 110);
-
-    this.ctx.fillText('Use the mouse to position the launchpad.', 20, 170);
-    this.ctx.fillText('Click and hold to aim your shark.', 20, 190);
-    this.ctx.fillText('Release to launch!', 20, 210);
-    this.ctx.fillText('Continue using the launchpad to ', 20, 240);
-    this.ctx.fillText('redirect your shark away from the deep!', 20, 260);
-
-    this.ctx.fillText('Background: https://opengameart.org/users/', 20, 320);
-    this.ctx.fillText('game-developer-studio', 116, 340);
-    this.ctx.fillText('Sea Nommables: https://rapidpunches.itch.io/', 20, 360);
-    this.ctx.fillText('Shark: https://opengameart.org/users/pillarist', 20, 380);
-    this.ctx.fillText('BGM: "Sunken Suite" (djpretzel / https://ocremix.org)', 20, 400);
-    this.ctx.fillText('Chomp Sounds: https://opengameart.org/users/darsycho', 20, 420);
-
-    this.ctx.beginPath();
-    this.ctx.moveTo(474, 553);
-    this.ctx.lineTo(577, 553);
-    this.ctx.lineTo(577, 583);
-    this.ctx.lineTo(474, 583);
-    this.ctx.closePath();
   }
 
   drawGameWon() {
