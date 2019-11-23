@@ -64,63 +64,6 @@ class Aquarium {
   };
 
   generateSealife() {
-    let genList = [
-      'anchovy', 'crab1', 'seahorse1', 'grunt', 'croaker', 'corepod',
-      'sandlance', 'sardine', 'herring', 'pollock', 'crab2',
-      'butter', 'mantaRay', 'jellyfish1', 'jellyfish2', 'seahorse2',
-      'jellyfish3', 'crab3', 'jellyfish4', 'halfbeak', 'sunfish1',
-      'sunfish2', 'crab4', 'anglerfish', 'polarBear1', 'polarBear2',
-      'gastropod1', 'gastropod2', 'pufferfish', 'whale1', 'whale2',
-      'swordfish', 'baiji', 'duck'
-    ]
-
-    genList.forEach((nommable, idx) => {
-      let sizeable = () => {
-        let maxPosX, maxPosY, minScale, maxScale;
-
-        if (idx <= 15) {
-          maxPosX = Aquarium.WIDTH - 48;
-          maxPosY = Aquarium.HEIGHT - 16 - 80;
-          minScale = 0.25;
-          maxScale = 3;
-        } else if (idx <= 28) {
-          maxPosX = Aquarium.WIDTH - 64;
-          maxPosY = Aquarium.HEIGHT - 32 - 80;
-          minScale = 0.5;
-          maxScale = 2;
-        } else if (idx <= 32) {
-          maxPosX = Aquarium.WIDTH - 96;
-          maxPosY = Aquarium.HEIGHT - 64 - 80;
-          minScale = 0.75;
-          maxScale = 1.5;
-        } else {
-          maxPosX = Aquarium.WIDTH - 128;
-          maxPosY = Aquarium.HEIGHT - 128 - 80;
-          minScale = 1;
-          maxScale = 1;
-        }
-
-        let scale = Math.random() * maxScale;
-
-        return {
-          pos: {
-            x: Math.floor(Math.random() * maxPosX),
-            y: Math.floor(Math.random() * maxPosY)
-          },
-          scale: scale >= minScale ? scale : minScale
-        };
-      }
-
-      let {pos, scale} = sizeable();
-
-      this.sealife.push(Sealife.create(
-        this,
-        pos,
-        scale,
-        nommable
-      ))
-    })
-
     // this.sealife.push(Sealife.create(
     //   this,
     //   {x: 200, y: 200},
@@ -128,6 +71,7 @@ class Aquarium {
     //   genList[2]
     // ))
 
+    Sealife.generate(Aquarium, this);
     this.numNommables = this.sealife.length;
   }
 
