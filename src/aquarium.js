@@ -3,6 +3,7 @@ const Shark = require('./shark');
 const Sealife = require('./sealife');
 const Sidebar = require('./sidebar');
 const About = require('./about');
+const Gameover = require('./gameover');
 
 class Aquarium {
   constructor(canvas, ctx) {
@@ -18,8 +19,6 @@ class Aquarium {
     this.launchpad = new Launchpad({width: Aquarium.WIDTH, height: Aquarium.HEIGHT});
     this.shark = new Shark(this.launchpad);
     this.sealife = [];
-    this.sidebar = new Sidebar(Aquarium);
-    this.about = new About(Aquarium);
     this.prevNommables = 0;
     this.numNommables = 0;
     this.nommed = {
@@ -33,7 +32,9 @@ class Aquarium {
     this.lostHP = 0;
     this.mouseLeftDown = false;
     this.paused = false;
-    this.gameover = false;
+    this.sidebar = new Sidebar(Aquarium);
+    this.about = new About(Aquarium);
+    this.gameover = new Gameover(Aquarium);
     this.gameWon = false;
     this.numWins = 0;
 
@@ -173,7 +174,7 @@ class Aquarium {
       this.canvas.style.cursor = 'default';
     }
 
-    if (!this.paused && !this.gameover) {
+    if (!this.paused && !this.gameover.active) {
       if (this.shark.launching && this.mouseLeftDown) {
         let vector = {x: mouseX - this.shark.pos.x, y: mouseY - this.shark.pos.y};
         let newAngle = Math.atan(vector.y / vector.x) * 180 / Math.PI;
@@ -195,7 +196,7 @@ class Aquarium {
 
     if (!this.bgm.ended) this.bgm.play();
 
-    if (mouseX <= Aquarium.WIDTH && this.shark.launching && !this.paused && !this.gameover) {
+    if (mouseX <= Aquarium.WIDTH && this.shark.launching && !this.paused && !this.gameover.active) {
       this.shark.launching = false;
       this.shark.setSpeed(5 + this.calcSpeedAdjust() - this.prevSpeedAdjust);
     }
@@ -204,7 +205,7 @@ class Aquarium {
       if (mouseX < Aquarium.WIDTH) {
         if (this.gameWon) {
           this.continue();
-        } else if (this.gameover) {
+        } else if (this.gameover.active) {
           this.reset();
         }
       } else if (mouseX >= 474 && mouseX < 547) {
@@ -224,7 +225,7 @@ class Aquarium {
     if (mouseX <= Aquarium.WIDTH
       && this.shark.launching
       && !this.paused
-      && !this.gameover
+      && !this.gameover.active
       && !this.gameWon
     ) this.mouseLeftDown = true;
   }
@@ -251,13 +252,13 @@ class Aquarium {
 
     if (this.about.active) this.about.draw(this.ctx);
     if (this.gameWon) this.drawGameWon();
-    if (this.gameover) this.drawGameover();
+    if (this.gameover.active) this.drawGameover();
   }
 
   animate() {
     this.ctx.clearRect(0, 0, Aquarium.WIDTH, Aquarium.HEIGHT);
 
-    if (!this.paused && !this.gameover && !this.gameWon) {
+    if (!this.paused && !this.gameover.active && !this.gameWon) {
       ++this.frame;
       this.shark.setFrame(Math.floor(this.frame / 4) % 7)
   
@@ -281,7 +282,7 @@ class Aquarium {
       ++this.numWins;
       this.gameWon = true;
     }
-    if (this.shark.hp < 1 && !this.gameover) this.gameover = true;
+    if (this.shark.hp < 1 && !this.gameover.active) this.gameover.active = true;
   }
 
   start() {
@@ -318,7 +319,7 @@ class Aquarium {
     this.lostHP = 0;
     this.mouseLeftDown = false;
     this.paused = false;
-    this.gameover = false;
+    this.gameover.active = false;
     this.generateSealife();
     this.shark.reset();
   }
