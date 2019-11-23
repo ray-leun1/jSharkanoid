@@ -2,8 +2,7 @@ const Launchpad = require('./launchpad');
 const Shark = require('./shark');
 const Sealife = require('./sealife');
 const Sidebar = require('./sidebar');
-const About = require('./about');
-const Gameover = require('./gameover');
+const Pages = require('./pages');
 
 class Aquarium {
   constructor(canvas, ctx) {
@@ -33,9 +32,7 @@ class Aquarium {
     this.mouseLeftDown = false;
     this.paused = false;
     this.sidebar = new Sidebar(Aquarium);
-    this.about = new About(Aquarium);
-    this.gameover = new Gameover(Aquarium);
-    this.gameWon = false;
+    this.pages = new Pages(Aquarium, this.ctx);
     this.numWins = 0;
 
     this.animate = this.animate.bind(this);
@@ -174,7 +171,7 @@ class Aquarium {
       this.canvas.style.cursor = 'default';
     }
 
-    if (!this.paused && !this.gameover.active) {
+    if (!this.paused && !this.pages.gameover) {
       if (this.shark.launching && this.mouseLeftDown) {
         let vector = {x: mouseX - this.shark.pos.x, y: mouseY - this.shark.pos.y};
         let newAngle = Math.atan(vector.y / vector.x) * 180 / Math.PI;
@@ -196,24 +193,24 @@ class Aquarium {
 
     if (!this.bgm.ended) this.bgm.play();
 
-    if (mouseX <= Aquarium.WIDTH && this.shark.launching && !this.paused && !this.gameover.active) {
+    if (mouseX <= Aquarium.WIDTH && this.shark.launching && !this.paused && !this.pages.gameover) {
       this.shark.launching = false;
       this.shark.setSpeed(5 + this.calcSpeedAdjust() - this.prevSpeedAdjust);
     }
 
     if (this.ctx.isPointInPath(mouseX, mouseY)) {
       if (mouseX < Aquarium.WIDTH) {
-        if (this.gameWon) {
+        if (this.pages.victory) {
           this.continue();
-        } else if (this.gameover.active) {
+        } else if (this.pages.gameover) {
           this.reset();
         }
       } else if (mouseX >= 474 && mouseX < 547) {
-        this.paused = this.about.active ? false : true;
-        this.about.active = this.about.active ? false : true;
+        this.paused = this.pages.about ? false : true;
+        this.pages.about = this.pages.about ? false : true;
       } else if (mouseX > 547 && mouseX <= 577) {
         this.paused = this.paused ? false : true;
-        this.about.active = false;
+        this.pages.about = false;
       }
     }
   }
@@ -225,8 +222,8 @@ class Aquarium {
     if (mouseX <= Aquarium.WIDTH
       && this.shark.launching
       && !this.paused
-      && !this.gameover.active
-      && !this.gameWon
+      && !this.pages.gameover
+      && !this.pages.victory
     ) this.mouseLeftDown = true;
   }
 
@@ -250,15 +247,15 @@ class Aquarium {
     this.sealife.forEach(consumable => consumable.draw(this.ctx));
     this.sidebar.draw(this);
 
-    if (this.about.active) this.about.draw(this.ctx);
-    if (this.gameWon) this.drawGameWon();
-    if (this.gameover.active) this.drawGameover();
+    if (this.pages.about) this.pages.drawAbout();
+    if (this.pages.victory) this.pages.drawVictory();
+    if (this.pages.gameover) this.pages.drawGameover();
   }
 
   animate() {
     this.ctx.clearRect(0, 0, Aquarium.WIDTH, Aquarium.HEIGHT);
 
-    if (!this.paused && !this.gameover.active && !this.gameWon) {
+    if (!this.paused && !this.pages.gameover && !this.pages.victory) {
       ++this.frame;
       this.shark.setFrame(Math.floor(this.frame / 4) % 7)
   
@@ -278,11 +275,11 @@ class Aquarium {
     this.draw();
     
     if (Object.values(this.nommed).reduce((acc, curr) => acc + curr)
-      - this.prevNommables === this.numNommables && !this.gameWon) {
+      - this.prevNommables === this.numNommables && !this.pages.victory) {
       ++this.numWins;
-      this.gameWon = true;
+      this.pages.victory = true;
     }
-    if (this.shark.hp < 1 && !this.gameover.active) this.gameover.active = true;
+    if (this.shark.hp < 1 && !this.pages.gameover) this.pages.gameover = true;
   }
 
   start() {
@@ -296,7 +293,7 @@ class Aquarium {
     this.numNommables = 0;
     this.mouseLeftDown = false;
     this.paused = false;
-    this.gameWon = false;
+    this.pages.victory = false;
     this.generateSealife();
     this.shark.reset();
   }
@@ -319,62 +316,9 @@ class Aquarium {
     this.lostHP = 0;
     this.mouseLeftDown = false;
     this.paused = false;
-    this.gameover.active = false;
+    this.pages.gameover = false;
     this.generateSealife();
     this.shark.reset();
-  }
-
-  drawGameWon() {
-    this.ctx.font = 'bold 56px sans-serif';
-    this.ctx.fillStyle = '#def3f6'
-    this.ctx.textAlign = 'center';
-    this.ctx.fillText('ATE \'EM', Aquarium.WIDTH / 2, Aquarium.HEIGHT / 2 - 24);
-
-    this.ctx.font = 'bold 32px monospace';
-    this.ctx.fillText('Nom More', Aquarium.WIDTH / 2, Aquarium.HEIGHT / 2 + 32);
-
-    this.ctx.beginPath();
-    this.ctx.moveTo(151, 310);
-    this.ctx.lineTo(300, 310);
-    this.ctx.lineTo(300, 332);
-    this.ctx.lineTo(151, 332);
-    this.ctx.closePath();
-  }
-
-  drawGameover() {
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-    this.ctx.beginPath();
-    this.ctx.moveTo(0, 0);
-    this.ctx.lineTo(Aquarium.WIDTH, 0);
-    this.ctx.lineTo(Aquarium.WIDTH, Aquarium.CANVAS_HEIGHT);
-    this.ctx.lineTo(0, Aquarium.CANVAS_HEIGHT);
-    this.ctx.closePath();
-    this.ctx.fill();
-
-    this.ctx.fillStyle = 'rgba(64, 103, 128, 0.55)';
-    this.ctx.beginPath();
-    this.ctx.moveTo(Aquarium.WIDTH, 0);
-    this.ctx.lineTo(Aquarium.CANVAS_WIDTH, 0);
-    this.ctx.lineTo(Aquarium.CANVAS_WIDTH, Aquarium.CANVAS_HEIGHT);
-    this.ctx.lineTo(Aquarium.WIDTH, Aquarium.CANVAS_HEIGHT);
-    this.ctx.closePath();
-    this.ctx.fill();
-
-    this.ctx.font = 'bold 56px sans-serif';
-    this.ctx.fillStyle = '#ffffff';
-    this.ctx.textAlign = 'center';
-    this.ctx.fillText('GAME OVER', Aquarium.WIDTH / 2, Aquarium.HEIGHT / 2 - 24);
-
-    this.ctx.font = 'bold 32px monospace';
-    this.ctx.fillStyle = '#ff7a00';
-    this.ctx.fillText('Restart', Aquarium.WIDTH / 2, Aquarium.HEIGHT / 2 + 32);
-
-    this.ctx.beginPath();
-    this.ctx.moveTo(162, 310);
-    this.ctx.lineTo(290, 310);
-    this.ctx.lineTo(290, 332);
-    this.ctx.lineTo(162, 332);
-    this.ctx.closePath();
   }
 }
 

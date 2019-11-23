@@ -77,7 +77,7 @@ class Shark {
       ((this.angle > 355 && this.angle < 5) ||
       (this.angle > 175 && this.angle < 185))
     ) {
-      this.angle += [-5, 5][Math.floor(Math.random() * 2)];
+      this.vel.y > 0 ? this.angle += 5 : this.angle -= 5;
     } else {
       this.angle = angle;
     }
