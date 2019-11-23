@@ -69,12 +69,15 @@ class Shark {
 
   setAngle(angle) {
     if (!this.launching &&
-      ((this.angle > 355 && this.angle < 5) ||
-      (this.angle > 89.5 && this.angle < 90.5) ||
-      (this.angle > 175 && this.angle < 185) ||
+      ((this.angle > 89.5 && this.angle < 90.5) ||
       (this.angle > 269.5 && this.angle < 270.5))
     ) {
-      this.angle += [-1, 1][Math.floor(Math.random() * 2)]
+      this.angle += [-1, 1][Math.floor(Math.random() * 2)];
+    } else if (!this.launching &&
+      ((this.angle > 355 && this.angle < 5) ||
+      (this.angle > 175 && this.angle < 185))
+    ) {
+      this.angle += [-5, 5][Math.floor(Math.random() * 2)];
     } else {
       this.angle = angle;
     }

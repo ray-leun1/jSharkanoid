@@ -1,6 +1,7 @@
 const Launchpad = require('./launchpad');
 const Shark = require('./shark');
 const Sealife = require('./sealife');
+const Sidebar = require('./sidebar');
 
 class Aquarium {
   constructor(canvas, ctx) {
@@ -8,22 +9,6 @@ class Aquarium {
     let BB = this.canvas.getBoundingClientRect();
     this.ctx = ctx;
     this.offset = {x: BB.left + 4, y: BB.top + 4};
-    this.sidebarAssets = {
-      smol: new Image(),
-      medium: new Image(),
-      large: new Image(),
-      huge: new Image(),
-      duck: new Image(),
-      life: new Image(),
-      death: new Image()
-    }
-    this.sidebarAssets.smol.src = './img/sealife/8x5_7x3_0x1_anchovy.png';
-    this.sidebarAssets.medium.src = './img/sealife/16x15_10x9_1x3_butter.png';
-    this.sidebarAssets.large.src = './img/sealife/30x30_24x24_5x3_pufferfish.png';
-    this.sidebarAssets.huge.src = './img/sealife/62x32_48x16_11x4_whale.png';
-    this.sidebarAssets.duck.src = './img/sealife/128x29_110x22_8x3_Duck.png';
-    this.sidebarAssets.life.src = './img/SharkIcon.png';
-    this.sidebarAssets.death.src = './img/SharkDeath.png';
     this.bgm = new Audio('./sound/sunken-suite.mp3');
     this.bgm.loop = true;
     this.bgm.currentTime = 0;
@@ -32,6 +17,7 @@ class Aquarium {
     this.launchpad = new Launchpad({width: Aquarium.WIDTH, height: Aquarium.HEIGHT});
     this.shark = new Shark(this.launchpad);
     this.sealife = [];
+    this.sidebar = new Sidebar(Aquarium);
     this.prevNommables = 0;
     this.numNommables = 0;
     this.nommed = {
@@ -68,7 +54,8 @@ class Aquarium {
     ) {
       shark.calcAngle('vel y mirror');
     } else if ( // Shark injury
-      (shark.pos.y > (Aquarium.HEIGHT + shark.width * 2/3) && shark.vel.y > 0)
+      (shark.pos.y > (Aquarium.HEIGHT + shark.width * 2/3) && shark.vel.y > 0) ||
+      (shark.pos.y > (Aquarium.HEIGHT + shark.width * 1/3) && shark.vel.y < shark.vel.x / 8)
     ) {
       this.prevSpeedAdjust = this.calcSpeedAdjust();
       shark.setAngle(270);
@@ -259,8 +246,7 @@ class Aquarium {
     this.shark.draw(this.ctx);
     this.launchpad.draw(this.ctx);
     this.sealife.forEach(consumable => consumable.draw(this.ctx));
-    this.drawSidebar();
-    this.drawBtns();
+    this.sidebar.draw(this);
 
     if (this.about) this.drawAbout();
     if (this.gameWon) this.drawGameWon();
@@ -334,106 +320,6 @@ class Aquarium {
     this.gameover = false;
     this.generateSealife();
     this.shark.reset();
-  }
-
-  drawBtns() {
-    this.ctx.fillStyle = '#064273';
-
-    this.ctx.font = 'bold 18px sans-serif';
-    this.ctx.textAlign = 'start';
-    this.ctx.fillText('About', 480, 575);
-
-
-    if (this.paused) {
-      this.ctx.beginPath();
-      this.ctx.moveTo(550, 556);
-      this.ctx.lineTo(573, 567);
-      this.ctx.lineTo(550, 579);
-      this.ctx.closePath();
-      this.ctx.fill();
-    } else {
-      this.ctx.beginPath();
-      this.ctx.moveTo(550, 556);
-      this.ctx.lineTo(560, 556);
-      this.ctx.lineTo(560, 580);
-      this.ctx.lineTo(550, 580);
-      this.ctx.closePath();
-      this.ctx.fill();
-
-      this.ctx.beginPath();
-      this.ctx.moveTo(564, 556);
-      this.ctx.lineTo(574, 556);
-      this.ctx.lineTo(574, 580);
-      this.ctx.lineTo(564, 580);
-      this.ctx.closePath();
-      this.ctx.fill();
-
-      this.ctx.beginPath();
-      this.ctx.moveTo(550, 556);
-      this.ctx.lineTo(574, 556);
-      this.ctx.lineTo(574, 580);
-      this.ctx.lineTo(550, 580);
-      this.ctx.closePath();
-    }
-
-    this.ctx.beginPath();
-    this.ctx.moveTo(474, 553);
-    this.ctx.lineTo(577, 553);
-    this.ctx.lineTo(577, 583);
-    this.ctx.lineTo(547, 583);
-    this.ctx.lineTo(547, 553);
-    this.ctx.lineTo(547, 583);
-    this.ctx.lineTo(474, 583);
-    this.ctx.closePath();
-    this.ctx.strokeStyle = '#064273';
-    this.ctx.lineWidth = 2;
-    this.ctx.stroke();
-  }
-
-  drawSidebar() {
-    this.ctx.fillStyle = 'rgba(127,205,255, 0.5)';
-    this.ctx.beginPath();
-    this.ctx.moveTo(Aquarium.WIDTH, 0);
-    this.ctx.lineTo(Aquarium.CANVAS_WIDTH, 0);
-    this.ctx.lineTo(Aquarium.CANVAS_WIDTH, Aquarium.CANVAS_HEIGHT);
-    this.ctx.lineTo(Aquarium.WIDTH, Aquarium.CANVAS_HEIGHT);
-    this.ctx.closePath();
-    this.ctx.fill();
-
-    this.ctx.fillStyle = '#064273';
-    this.ctx.font = 'bold 19px sans-serif';
-    this.ctx.textAlign = 'center';
-    this.ctx.fillText('jSharkanoid', (Aquarium.CANVAS_WIDTH + Aquarium.WIDTH) / 2, 30)
-    this.ctx.font = '18px monospace';
-    this.ctx.textAlign = 'left';
-    this.ctx.fillText(this.nommed.smol + 'x', 460, 70);
-    this.ctx.fillText(this.nommed.medium + 'x', 460, 110);
-    this.ctx.fillText(this.nommed.large + 'x', 460, 150);
-    this.ctx.fillText(this.nommed.huge + 'x', 460, 190);
-    this.ctx.fillText(this.nommed.duck + 'x', 460, 230);
-    this.ctx.drawImage(this.sidebarAssets.smol, 500, 62);
-    this.ctx.drawImage(this.sidebarAssets.medium, 500, 97);
-    this.ctx.drawImage(this.sidebarAssets.large, 500, 132, 0.9 * 30, 0.9 * 30);
-    this.ctx.drawImage(this.sidebarAssets.huge, 500, 175, 0.8 * 62, 0.8 * 32);
-    this.ctx.drawImage(this.sidebarAssets.duck, 500, 215, 0.7 * 128, 0.7 * 29);
-    this.ctx.textAlign = 'center'
-    
-    this.ctx.fillText('Shark Speed', (Aquarium.CANVAS_WIDTH + Aquarium.WIDTH) / 2, 300);
-    this.ctx.fillText(this.calcSharkSpeed().toFixed(1), (Aquarium.CANVAS_WIDTH + Aquarium.WIDTH) / 2, 330);
-    
-    this.ctx.fillText('Shark Lives', (Aquarium.CANVAS_WIDTH + Aquarium.WIDTH) / 2, 390);
-    if (this.shark.hp <= 0) {
-      this.ctx.drawImage(this.sidebarAssets.death, 476, 405);
-    } else {
-      if (this.shark.hp >= 1) this.ctx.drawImage(this.sidebarAssets.life, 465, 405, 36, 36);
-      if (this.shark.hp >= 2) this.ctx.drawImage(this.sidebarAssets.life, 506, 405, 36, 36);
-      if (this.shark.hp >= 3) this.ctx.drawImage(this.sidebarAssets.life, 547, 405, 36, 36);
-      if (this.shark.hp >= 4) this.ctx.drawImage(this.sidebarAssets.life, 465, 445, 36, 36);
-      if (this.shark.hp >= 5) this.ctx.drawImage(this.sidebarAssets.life, 506, 445, 36, 36);
-      if (this.shark.hp >= 6) this.ctx.drawImage(this.sidebarAssets.life, 547, 445, 36, 36);
-    }
-
-    this.drawBtns();
   }
 
   drawAbout() {
