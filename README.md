@@ -1,36 +1,70 @@
 # jSharkanoid
 
-A clone of classic arcade game Arkanoid written in javascript and shark themed. There are block-shaped sea life at the top of the screen that the user must consume by sending a shark at them. The shark ricochets on blocks, the top, left, and rights sides of the screen, and a deployment pad at the bottom of the screen that the user uses the LEFT and RIGHT arrow keys to move.
-
-## Functionality and MVP
- - [ ] Certain sea life will take more than one bite to consume
- - [ ] Lose a hit point if the shark misses the deployment pad and reaches the bottom of the screen
- - [ ] Regenerate hit points up to a certain maximum after consuming enough sea life
- - [ ] Includes multiple levels that may take on a variety of sea life layout
- - [ ] Has game stats shown on the side of the screen
- - [ ] Can pause and resume the game
+A clone of classic arcade game Arkanoid written in javascript and shark themed. There are block-shaped sea life in the ocean that the user must consume by sending a shark at them. The shark ricochets on blocks, the top, left, and rights sides of the screen, and a launchpad at the bottom of the screen, and the goal is to consume all sea life without running out of lives.
 
 ## Architecture and Technologies
  * `Javascript` for game logic
  * `webpack` to bundle js files
  
-Additionally, the following scripts will be involved:
+## Technical Challenges
+The game features a variety of object collision and rotational calculations that needed to be defined in relation to the flipped y-axis of html. Each problem required testing and verification by hand calculations in addition to testing in the actual implementation. Sometimes, the calculations did not quite fit the game well, and adjustments had to be made, including the use of corner collision and launchpad friction to change the angle of the shark in order to make the game more dynamic.
 
-`aquarium.js`: This script handles rendering and managing of the game objects along with the launchpad movement.
+## Features
+ - A variety of sea life is generated on each level, with many taking more than one bite to consume
+ - The shark loses a life if it misses the launchpad and reaches the bottom of the screen
+ - The shark will regenerate lives after consuming enough sea life
+ - Game stats are shown on a sidebar to the right of the game area
+ - The game can be paused or resumed by clicking on a button in the sidebar
+ - Game sounds for background music and shark bites are included
 
-`sealife.js`: This script handles basic sealife data like type and hit points.
+## Upcoming Features
+ - Implement more complex maps, including the use of invulnerable sea life blocks
+ - Implement power up drops as a result of random consume chance or as drops that fall by random chance
 
-`shark.js`: This script handles the position logic of the shark in the game along with stats
+## Code Implementation
 
-## Implementation Timeline
-**Day 1:** Setup node modules including webpack, setup project skeleton. Organize sprites and get them working.
+While different collision checks were implemented in each individual object that the shark collides with, the angle calculations were all determined from the shark file. Here, the two more notabel collision cases are 'corner' and 'launchpad', which both have special rules on how to determine the next angle of the shark.
 
-**Day 2:** Setup object movement and collision and test them, then work on game logic associated with various object collisions
+```javascript
+calcAngle(option, params) {
+  if (option === 'vel x mirror') {
+    if (this.vel.y < 0) this.setAngle(540 - this.angle);
+    if (this.vel.y > 0) this.setAngle(180 - this.angle);
+  } else if (option === 'vel y mirror') {
+    this.setAngle(360 - this.angle);
+  } else if (option === 'corner') {
+    let vector = {x: params.x - this.pos.x, y: params.y - this.pos.y};
+    let vectorAngle = Math.atan(vector.y / vector.x) * 180 / Math.PI;
+    let tangentAngle = vectorAngle + 90;
+    let newAngle = 360 - (this.angle - tangentAngle) + tangentAngle;
+    while (newAngle > 360) newAngle -= 360;
+    this.setAngle(newAngle);
+  } else if (option === 'launchpad') {
+    let newVel = {x: this.vel.x + (params.vel * params.friction), y: this.vel.y}
+    if (newVel.x === 0) newVel.x += [-1, 1][Math.floor(Math.random() * 2)];
+    let newAngle = Math.atan(newVel.y / newVel.x) * 180 / Math.PI;
+    if ((newVel.x < 0 && newVel.y > 1) || (newVel.x < 0 && newVel.y < 0)) {
+      newAngle += 180;
+    } else if (newVel.x > 1 && newVel.y < 1) {
+      newAngle += 360;
+    }
+    this.setAngle(newAngle);
+    this.calcAngle('vel y mirror');
+  }
+}
+```
 
-**Day 3:** Build out various game levels
+A case that required some testing was the position of the shark in its own local coordinates. This was used to determine its location when drawing it in canvas, as the canvas needed to be rotated before drawing the shark image in order to handle image rotation.
 
-**Day 4:** Implement stats sidebar and pause/resume functionality
+```javascript
+localPos() { // Calculate position in shark local coordinates
+  let cosAngle = Math.cos(Math.PI * this.angle / 180);
+  let sinAngle = Math.sin(Math.PI * this.angle / 180);
+  return {
+    x: this.pos.x * cosAngle + this.pos.y * sinAngle,
+    y: this.pos.y * cosAngle - this.pos.x * sinAngle
+  }
+}
+```
 
-## Bonus Features
- - [ ] Implement more complex maps, including more usage of invulnerable sea life blocks
- - [ ] Implement power up drops as a result of random consume chance or as drops that fall by random chance
+Thank you for playing jSharkanoid!

@@ -15,13 +15,13 @@ class Launchpad {
   collision(shark) {
     if ( // Left and right side collision
       ((shark.vel.x > 0 && Math.abs(shark.pos.x - this.x1) < shark.size) ||
-        (shark.vel.x < 0 && Math.abs(shark.pos.x - this.x2) < shark.size)) &&
+      (shark.vel.x < 0 && Math.abs(shark.pos.x - this.x2) < shark.size)) &&
       shark.pos.y > this.y1 && shark.pos.y < this.y2
     ) {
       shark.calcAngle('vel x mirror');
     } else if ( // Top (and bottom, though not possible) side collision
       ((shark.vel.y > 0 && Math.abs(shark.pos.y - this.y1) < shark.size) ||
-        (shark.vel.y < 0 && Math.abs(shark.pos.y - this.y2) < shark.size)) &&
+      (shark.vel.y < 0 && Math.abs(shark.pos.y - this.y2) < shark.size)) &&
       shark.pos.x > this.x1 && shark.pos.x < this.x2
     ) {
       shark.calcAngle('launchpad', {vel: this.vel, friction: this.friction});

@@ -104,45 +104,45 @@ class Sealife {
   }
 }
 
-Sealife.create = (aquarium, pos, scale, name) => {
-  fileAssociations = {
-    anchovy: '8x5_7x3_0x1_anchovy.png',
-    crab1: '12x11_6x4_3x3_crab.png',
-    seahorse1: '13x32_9x28_2x2_seahorse.png',
-    grunt: '14x9_12x6_1x1_grunt.png',
-    croaker: '14x11_13x7_1x2_croaker.png',
-    corepod: '15x11_10x4_4x4_corepod.png',
-    sandlance: '16x4_14x3_0x0_sandlance.png',
-    sardine: '16x6_13x3_0x2_sardine.png',
-    herring: '16x7_14x4_0x2_herring.png',
-    pollock: '16x8_12x6_1x1_pollock.png',
-    crab2: '16x13_6x4_5x4_crab.png',
-    butter: '16x15_10x9_1x3_butter.png',
-    mantaRay: '16x16_12x12_1x1_manta-ray.png',
-    jellyfish1: '16x16_14x12_1x1_jellyfish-cyan.png',
-    jellyfish2: '16x16_14x12_1x1_jellyfish-mint.png',
-    seahorse2: '17x32_11x30_3x1_Seahorse.png',
-    jellyfish3: '18x7_16x12_1x1_jellyfish.png',
-    crab3: '22x23_12x14_5x4_crab.png',
-    jellyfish4: '22x25_20x16_1x1_jellyfish.png',
-    halfbeak: '24x7_17x3_4x3_halfbeak.png',
-    sunfish1: '24x24_23x18_0x4_sunfish.png',
-    sunfish2: '24x24_23x18_0x4_sunfish-ah.png',
-    crab4: '28x20_16x1_5x1_crab.png',
-    anglerfish: '29x26_23x20_4x4_anglerfish.png',
-    polarBear1: '30x19_24x12_1x2_goldar-bear.png',
-    polarBear2: '30x19_24x12_1x2_polar-bear.png',
-    gastropod1: '30x25_25x22_2x2_gastropod-gray.png',
-    gastropod2: '30x25_25x22_2x2_gastropod-orange.png',
-    pufferfish: '30x30_24x24_5x3_pufferfish.png',
-    whale1: '62x30_48x16_11x4_whale.png',
-    whale2: '62x32_48x16_11x4_whale.png',
-    swordfish: '64x16_40x8_17x4_swordfish.png',
-    baiji: '64x22_44x14_10x4_baiji.png',
-    duck: '128x29_110x22_8x3_Duck.png'
-  }
+Sealife.fileAssociations = {
+  anchovy: '8x5_7x3_0x1_anchovy.png',
+  crab1: '12x11_6x4_3x3_crab.png',
+  seahorse1: '13x32_9x28_2x2_seahorse.png',
+  grunt: '14x9_12x6_1x1_grunt.png',
+  croaker: '14x11_13x7_1x2_croaker.png',
+  corepod: '15x11_10x4_4x4_corepod.png',
+  sandlance: '16x4_14x3_0x0_sandlance.png',
+  sardine: '16x6_13x3_0x2_sardine.png',
+  herring: '16x7_14x4_0x2_herring.png',
+  pollock: '16x8_12x6_1x1_pollock.png',
+  crab2: '16x13_6x4_5x4_crab.png',
+  butter: '16x15_10x9_1x3_butter.png',
+  mantaRay: '16x16_12x12_1x1_manta-ray.png',
+  jellyfish1: '16x16_14x12_1x1_jellyfish-cyan.png',
+  jellyfish2: '16x16_14x12_1x1_jellyfish-mint.png',
+  seahorse2: '17x32_11x30_3x1_Seahorse.png',
+  jellyfish3: '18x7_16x12_1x1_jellyfish.png',
+  crab3: '22x23_12x14_5x4_crab.png',
+  jellyfish4: '22x25_20x16_1x1_jellyfish.png',
+  halfbeak: '24x7_17x3_4x3_halfbeak.png',
+  sunfish1: '24x24_23x18_0x4_sunfish.png',
+  sunfish2: '24x24_23x18_0x4_sunfish-ah.png',
+  crab4: '28x20_16x1_5x1_crab.png',
+  anglerfish: '29x26_23x20_4x4_anglerfish.png',
+  polarBear1: '30x19_24x12_1x2_goldar-bear.png',
+  polarBear2: '30x19_24x12_1x2_polar-bear.png',
+  gastropod1: '30x25_25x22_2x2_gastropod-gray.png',
+  gastropod2: '30x25_25x22_2x2_gastropod-orange.png',
+  pufferfish: '30x30_24x24_5x3_pufferfish.png',
+  whale1: '62x30_48x16_11x4_whale.png',
+  whale2: '62x32_48x16_11x4_whale.png',
+  swordfish: '64x16_40x8_17x4_swordfish.png',
+  baiji: '64x22_44x14_10x4_baiji.png',
+  duck: '128x29_110x22_8x3_Duck.png'
+};
 
-  let filename = fileAssociations[name];
+Sealife.create = (aquarium, pos, scale, name) => {
+  let filename = Sealife.fileAssociations[name];
 
   let [sizeImage, sizeNommable, offset] = filename.split('_');
   sizeImage = sizeImage.split('x');
@@ -173,5 +173,51 @@ Sealife.create = (aquarium, pos, scale, name) => {
 
   return new Sealife(options);
 };
+
+Sealife.generate = (Aquarium, aquarium) => {
+  Object.keys(Sealife.fileAssociations).forEach((nommable, idx) => {
+    let sizeable = () => {
+      let maxPosX, maxPosY, minScale, maxScale;
+
+      if (idx <= 15) {
+        maxPosX = Aquarium.WIDTH - 48;
+        maxPosY = Aquarium.HEIGHT - 16 - 80;
+        minScale = 0.25;
+        maxScale = 3;
+      } else if (idx <= 28) {
+        maxPosX = Aquarium.WIDTH - 64;
+        maxPosY = Aquarium.HEIGHT - 32 - 80;
+        minScale = 0.5;
+        maxScale = 2;
+      } else if (idx <= 32) {
+        maxPosX = Aquarium.WIDTH - 96;
+        maxPosY = Aquarium.HEIGHT - 64 - 80;
+        minScale = 0.75;
+        maxScale = 1.5;
+      } else {
+        maxPosX = Aquarium.WIDTH - 128;
+        maxPosY = Aquarium.HEIGHT - 128 - 80;
+        minScale = 1;
+        maxScale = 1;
+      }
+
+      let scale = Math.random() * maxScale;
+
+      return {
+        pos: {
+          x: Math.floor(Math.random() * maxPosX),
+          y: Math.floor(Math.random() * maxPosY)
+        },
+        scale: scale >= minScale ? scale : minScale
+      };
+    }
+
+    let { pos, scale } = sizeable();
+
+    aquarium.sealife.push(Sealife.create(
+      aquarium, pos, scale, nommable
+    ))
+  })
+}
 
 module.exports = Sealife;
