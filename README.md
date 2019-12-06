@@ -1,6 +1,6 @@
 # [jSharkanoid](https://jSharkanoid.firebaseapp.com)
 
-A clone of classic arcade game Arkanoid written in javascript and shark themed. There are block-shaped sea life in the ocean that the user must consume by sending a shark at them. The shark ricochets on blocks, the top, left, and rights sides of the screen, and a launchpad at the bottom of the screen, and the goal is to consume all sea life without running out of lives.
+A clone of classic arcade game Arkanoid written in javascript and shark themed. There are block-shaped sea life in the ocean that the user must consume by sending a shark at them. The shark ricochets on blocks, the top, left, and right sides of the screen, and a launchpad at the bottom of the screen, and the goal is to consume all sea life without running out of lives.
 
 ## Architecture and Technologies
  * `Javascript` for game logic
