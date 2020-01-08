@@ -43,7 +43,8 @@ class Shark {
   calcAngle(option, params) {
     if (option === 'vel x mirror') {
       if (this.vel.y < 0) this.setAngle(540 - this.angle);
-      if (this.vel.y > 0) this.setAngle(180 - this.angle);
+      else if (this.vel.y === 0) this.setAngle(this.angle + (Math.random() * 10 - 5));
+      else if (this.vel.y > 0) this.setAngle(180 - this.angle);
     } else if (option === 'vel y mirror') {
       this.setAngle(360 - this.angle);
     } else if (option === 'corner') {
@@ -68,6 +69,8 @@ class Shark {
   }
 
   setAngle(angle) {
+    this.angle = angle;
+
     if (!this.launching &&
       ((this.angle > 89.5 && this.angle < 90.5) ||
       (this.angle > 269.5 && this.angle < 270.5))
@@ -77,10 +80,10 @@ class Shark {
       ((this.angle > 355 && this.angle < 5) ||
       (this.angle > 175 && this.angle < 185))
     ) {
-      this.vel.y > 0 ? this.angle += 5 : this.angle -= 5;
-    } else {
-      this.angle = angle;
+      this.vel.y > 0 ? this.angle -= 5 : this.angle += 5;
+      if (this.vel.y === 0) this.angle += Math.random() * 10 - 5;
     }
+
     this.setVel();
   }
 
