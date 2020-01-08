@@ -100,19 +100,19 @@ class Sidebar {
     aquarium.ctx.drawImage(this.assets.duck, 500, 215, 0.7 * 128, 0.7 * 29);
     aquarium.ctx.textAlign = 'center'
 
-    aquarium.ctx.fillText('Shark Speed', (this.Aquarium.CANVAS_WIDTH + this.Aquarium.WIDTH) / 2, 300);
-    aquarium.ctx.fillText(aquarium.calcSharkSpeed().toFixed(1), (this.Aquarium.CANVAS_WIDTH + this.Aquarium.WIDTH) / 2, 330);
+    aquarium.ctx.fillText('Shark Speed', (this.Aquarium.CANVAS_WIDTH + this.Aquarium.WIDTH) / 2, 280);
+    aquarium.ctx.fillText(aquarium.calcSharkSpeed().toFixed(1), (this.Aquarium.CANVAS_WIDTH + this.Aquarium.WIDTH) / 2, 310);
 
-    aquarium.ctx.fillText('Shark Lives', (this.Aquarium.CANVAS_WIDTH + this.Aquarium.WIDTH) / 2, 390);
-    if (aquarium.shark.hp <= 0) {
-      aquarium.ctx.drawImage(this.assets.death, 476, 405);
+    aquarium.ctx.fillText('Shark Lives', (this.Aquarium.CANVAS_WIDTH + this.Aquarium.WIDTH) / 2, 350);
+    if (aquarium.shark.hp < 1) {
+      aquarium.ctx.drawImage(this.assets.death, 476, 365);
     } else {
-      if (aquarium.shark.hp >= 1) aquarium.ctx.drawImage(this.assets.life, 465, 405, 36, 36);
-      if (aquarium.shark.hp >= 2) aquarium.ctx.drawImage(this.assets.life, 506, 405, 36, 36);
-      if (aquarium.shark.hp >= 3) aquarium.ctx.drawImage(this.assets.life, 547, 405, 36, 36);
-      if (aquarium.shark.hp >= 4) aquarium.ctx.drawImage(this.assets.life, 465, 445, 36, 36);
-      if (aquarium.shark.hp >= 5) aquarium.ctx.drawImage(this.assets.life, 506, 445, 36, 36);
-      if (aquarium.shark.hp >= 6) aquarium.ctx.drawImage(this.assets.life, 547, 445, 36, 36);
+      if (aquarium.shark.hp >= 1) aquarium.ctx.drawImage(this.assets.life, 465, 365, 36, 36);
+      if (aquarium.shark.hp >= 2) aquarium.ctx.drawImage(this.assets.life, 506, 365, 36, 36);
+      if (aquarium.shark.hp >= 3) aquarium.ctx.drawImage(this.assets.life, 547, 365, 36, 36);
+      if (aquarium.shark.hp >= 4) aquarium.ctx.drawImage(this.assets.life, 465, 405, 36, 36);
+      if (aquarium.shark.hp >= 5) aquarium.ctx.drawImage(this.assets.life, 506, 405, 36, 36);
+      if (aquarium.shark.hp >= 6) aquarium.ctx.drawImage(this.assets.life, 547, 405, 36, 36);
     }
 
     this.drawBtns(aquarium);
