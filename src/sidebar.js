@@ -85,7 +85,7 @@ class Sidebar {
     aquarium.ctx.fillStyle = '#064273';
     aquarium.ctx.font = 'bold 19px sans-serif';
     aquarium.ctx.textAlign = 'center';
-    aquarium.ctx.fillText('jSharkanoid', Sidebar.WIDTH / 2, 30)
+    aquarium.ctx.fillText('jSharkanoid', Sidebar.LEFT + (Sidebar.WIDTH / 2), 30)
     aquarium.ctx.font = '18px monospace';
     aquarium.ctx.textAlign = 'left';
     aquarium.ctx.fillText(aquarium.nommed.smol + 'x', Sidebar.LEFT + 10, 70);
@@ -100,10 +100,10 @@ class Sidebar {
     aquarium.ctx.drawImage(this.assets.duck, Sidebar.LEFT + 50, 215, 0.7 * 128, 0.7 * 29);
     aquarium.ctx.textAlign = 'center'
 
-    aquarium.ctx.fillText('Shark Speed', Sidebar.WIDTH / 2, 280);
-    aquarium.ctx.fillText(aquarium.calcSharkSpeed().toFixed(1), Sidebar.WIDTH / 2, 310);
+    aquarium.ctx.fillText('Shark Speed', Sidebar.LEFT + (Sidebar.WIDTH / 2), 280);
+    aquarium.ctx.fillText(aquarium.calcSharkSpeed().toFixed(1), Sidebar.LEFT + (Sidebar.WIDTH / 2), 310);
 
-    aquarium.ctx.fillText('Shark Lives', Sidebar.WIDTH / 2, 350);
+    aquarium.ctx.fillText('Shark Lives', Sidebar.LEFT + (Sidebar.WIDTH / 2), 350);
     if (aquarium.shark.hp < 1) {
       aquarium.ctx.drawImage(this.assets.death, 476, 365);
     } else {
@@ -119,7 +119,7 @@ class Sidebar {
   }
 }
 
-Sidebar.LEFT = this.Aquarium.WIDTH;
+Sidebar.LEFT = 450;
 Sidebar.WIDTH = 150;
 
 module.exports = Sidebar;
