@@ -181,22 +181,22 @@ Sealife.generate = (Aquarium, aquarium) => {
 
       if (idx <= 15) {
         maxPosX = Aquarium.WIDTH - 48;
-        maxPosY = Aquarium.HEIGHT - 16 - 80;
+        maxPosY = Aquarium.CANVAS_HEIGHT - 16 - 80;
         minScale = 0.25;
         maxScale = 3;
       } else if (idx <= 28) {
         maxPosX = Aquarium.WIDTH - 64;
-        maxPosY = Aquarium.HEIGHT - 32 - 80;
+        maxPosY = Aquarium.CANVAS_HEIGHT - 32 - 80;
         minScale = 0.5;
         maxScale = 2;
       } else if (idx <= 32) {
         maxPosX = Aquarium.WIDTH - 96;
-        maxPosY = Aquarium.HEIGHT - 64 - 80;
+        maxPosY = Aquarium.CANVAS_HEIGHT - 64 - 80;
         minScale = 0.75;
         maxScale = 1.5;
       } else {
         maxPosX = Aquarium.WIDTH - 128;
-        maxPosY = Aquarium.HEIGHT - 128 - 80;
+        maxPosY = Aquarium.CANVAS_HEIGHT - 128 - 80;
         minScale = 1;
         maxScale = 1;
       }

@@ -55,10 +55,10 @@ class Pages {
     this.ctx.font = 'bold 56px sans-serif';
     this.ctx.fillStyle = '#def3f6'
     this.ctx.textAlign = 'center';
-    this.ctx.fillText('ATE \'EM', this.Aquarium.WIDTH / 2, this.Aquarium.HEIGHT / 2 - 24);
+    this.ctx.fillText('ATE \'EM', this.Aquarium.WIDTH / 2, this.Aquarium.CANVAS_HEIGHT / 2 - 24);
 
     this.ctx.font = 'bold 32px monospace';
-    this.ctx.fillText('Nom More', this.Aquarium.WIDTH / 2, this.Aquarium.HEIGHT / 2 + 32);
+    this.ctx.fillText('Nom More', this.Aquarium.WIDTH / 2, this.Aquarium.CANVAS_HEIGHT / 2 + 32);
 
     this.ctx.beginPath();
     this.ctx.moveTo(151, 310);
@@ -90,11 +90,11 @@ class Pages {
     this.ctx.font = 'bold 56px sans-serif';
     this.ctx.fillStyle = '#ffffff';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText('GAME OVER', this.Aquarium.WIDTH / 2, this.Aquarium.HEIGHT / 2 - 24);
+    this.ctx.fillText('GAME OVER', this.Aquarium.WIDTH / 2, this.Aquarium.CANVAS_HEIGHT / 2 - 24);
 
     this.ctx.font = 'bold 32px monospace';
     this.ctx.fillStyle = '#ff7a00';
-    this.ctx.fillText('Restart', this.Aquarium.WIDTH / 2, this.Aquarium.HEIGHT / 2 + 32);
+    this.ctx.fillText('Restart', this.Aquarium.WIDTH / 2, this.Aquarium.CANVAS_HEIGHT / 2 + 32);
 
     this.ctx.beginPath();
     this.ctx.moveTo(162, 310);

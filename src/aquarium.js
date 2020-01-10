@@ -15,7 +15,7 @@ class Aquarium {
     this.bgm.currentTime = 0;
     this.bgm.volume = 0.05;
     this.frame = 0;
-    this.launchpad = new Launchpad({width: Aquarium.WIDTH, height: Aquarium.HEIGHT});
+    this.launchpad = new Launchpad({width: Aquarium.WIDTH, height: Aquarium.CANVAS_HEIGHT});
     this.shark = new Shark(this.launchpad);
     this.sealife = [];
     this.prevNommables = 0;
@@ -49,12 +49,12 @@ class Aquarium {
       shark.calcAngle('vel x mirror');
     } else if ( // Ceiling collision and floor collision (DEBUG)
       (shark.pos.y < shark.size && shark.vel.y < 0)
-      // || (shark.pos.y > (Aquarium.HEIGHT - shark.size) && shark.vel.y > 0)
+      // || (shark.pos.y > (Aquarium.CANVAS_HEIGHT - shark.size) && shark.vel.y > 0)
     ) {
       shark.calcAngle('vel y mirror');
     } else if ( // Shark injury
-      (shark.pos.y > (Aquarium.HEIGHT + shark.width * 2/3) && shark.vel.y > 0) ||
-      (shark.pos.y > (Aquarium.HEIGHT + shark.width * 1/3) && shark.vel.y < shark.vel.x / 8)
+      (shark.pos.y > (Aquarium.CANVAS_HEIGHT + shark.width * 2/3) && shark.vel.y > 0) ||
+      (shark.pos.y > (Aquarium.CANVAS_HEIGHT + shark.width * 1/3) && shark.vel.y < shark.vel.x / 8)
     ) {
       this.prevSpeedAdjust = this.calcSpeedAdjust();
       shark.setAngle(270);
@@ -197,7 +197,7 @@ class Aquarium {
   }
 
   animate() {
-    this.ctx.clearRect(0, 0, Aquarium.WIDTH, Aquarium.HEIGHT);
+    this.ctx.clearRect(0, 0, Aquarium.WIDTH, Aquarium.CANVAS_HEIGHT);
 
     if (!this.paused && !this.pages.gameover && !this.pages.victory) {
       ++this.frame;
@@ -244,7 +244,7 @@ class Aquarium {
 
   reset() {
     this.frame = 0;
-    this.launchpad = new Launchpad({ width: Aquarium.WIDTH, height: Aquarium.HEIGHT });
+    this.launchpad = new Launchpad({ width: Aquarium.WIDTH, height: Aquarium.CANVAS_HEIGHT });
     this.shark = new Shark(this.launchpad);
     this.sealife = [];
     this.nommed = {
@@ -266,11 +266,13 @@ class Aquarium {
   }
 }
 
+Aquarium.LEFT = 0;
 Aquarium.WIDTH = 450;
-Aquarium.HEIGHT = 600;
-Aquarium.CANVAS_WIDTH = 600;
+Aquarium.SIDEBAR_LEFT = 450;
+Aquarium.SIDEBAR_WIDTH = 150;
+Aquarium.CANVAS_WIDTH = Aquarium.WIDTH + Aquarium.SIDEBAR_WIDTH;
 Aquarium.CANVAS_HEIGHT = 600;
-Aquarium.BG = new Image(Aquarium.WIDTH, Aquarium.HEIGHT);
+Aquarium.BG = new Image(Aquarium.WIDTH, Aquarium.CANVAS_HEIGHT);
 Aquarium.BG.src = "./img/background.png";
 
 module.exports = Aquarium;
