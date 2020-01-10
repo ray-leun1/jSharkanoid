@@ -15,7 +15,7 @@ class Aquarium {
     this.bgm.currentTime = 0;
     this.bgm.volume = 0.05;
     this.frame = 0;
-    this.launchpad = new Launchpad({width: Aquarium.WIDTH, height: Aquarium.CANVAS_HEIGHT});
+    this.launchpad = new Launchpad({left: Aquarium.LEFT, width: Aquarium.WIDTH, height: Aquarium.CANVAS_HEIGHT});
     this.shark = new Shark(this.launchpad);
     this.sealife = [];
     this.prevNommables = 0;
@@ -44,7 +44,7 @@ class Aquarium {
     // Wall and ceiling collision
     if ( // Left and right wall collision
       (shark.pos.x < shark.size && shark.vel.x < 0) ||
-      (shark.pos.x > (Aquarium.WIDTH - shark.size) && shark.vel.x > 0)
+      (shark.pos.x > ((Aquarium.LEFT + Aquarium.WIDTH) - shark.size) && shark.vel.x > 0)
     ) {
       shark.calcAngle('vel x mirror');
     } else if ( // Ceiling collision and floor collision (DEBUG)
@@ -137,22 +137,22 @@ class Aquarium {
 
     if (!this.bgm.ended) this.bgm.play();
 
-    if (mouseX <= Aquarium.WIDTH && this.shark.launching && !this.paused && !this.pages.gameover) {
+    if (mouseX >= Aquarium.LEFT && mouseX <= Aquarium.WIDTH && this.shark.launching && !this.paused && !this.pages.gameover) {
       this.shark.launching = false;
       this.shark.setSpeed(5 + this.calcSpeedAdjust() - this.prevSpeedAdjust);
     }
 
     if (this.ctx.isPointInPath(mouseX, mouseY)) {
-      if (mouseX < Aquarium.WIDTH) {
+      if (mouseX > Aquarium.LEFT && mouseX < Aquarium.WIDTH) {
         if (this.pages.victory) {
           this.continue();
         } else if (this.pages.gameover) {
           this.reset();
         }
-      } else if (mouseX >= 474 && mouseX < 547) {
+      } else if ((mouseX >= Aquarium.SIDEBAR_LEFT + 24) && (mouseX < Aquarium.SIDEBAR_LEFT + 97)) {
         this.paused = this.pages.about ? false : true;
         this.pages.about = this.pages.about ? false : true;
-      } else if (mouseX > 547 && mouseX <= 577) {
+      } else if ((mouseX > Aquarium.SIDEBAR_LEFT + 97) && (mouseX <= Aquarium.SIDEBAR_LEFT + 27)) {
         this.paused = this.paused ? false : true;
         this.pages.about = false;
       }
@@ -244,7 +244,7 @@ class Aquarium {
 
   reset() {
     this.frame = 0;
-    this.launchpad = new Launchpad({ width: Aquarium.WIDTH, height: Aquarium.CANVAS_HEIGHT });
+    this.launchpad = new Launchpad({left: Aquarium.LEFT, width: Aquarium.WIDTH, height: Aquarium.CANVAS_HEIGHT });
     this.shark = new Shark(this.launchpad);
     this.sealife = [];
     this.nommed = {
