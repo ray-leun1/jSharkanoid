@@ -4,7 +4,7 @@ class Launchpad {
     this.image = new Image();
     this.image.src = './img/Launchpad.png';
     this.size = {width: 80, height: 14};
-    this.x1 = (aquarium.width / 2) - (this.size.width / 2);
+    this.x1 = ((aquarium.left + aquarium.width) / 2) - (this.size.width / 2);
     this.y1 = aquarium.height - 16 - this.size.height;
     this.x2 = this.x1 + this.size.width;
     this.y2 = this.y1 + this.size.height;
@@ -42,12 +42,12 @@ class Launchpad {
   setPos(centerX) {
     let oldx1 = this.x1;
 
-    if (centerX < (this.size.width / 2)) {
-      this.x1 = 0;
-      this.x2 = this.size.width;
-    } else if (centerX > (this.aquarium.width - this.size.width / 2)) {
-      this.x1 = this.aquarium.width - this.size.width;
-      this.x2 = this.aquarium.width;
+    if (centerX < (this.aquarium.left + this.size.width / 2)) {
+      this.x1 = this.aquarium.left;
+      this.x2 = this.aquarium.left + this.size.width;
+    } else if (centerX > ((this.aquarium.left + this.aquarium.width) - this.size.width / 2)) {
+      this.x1 = (this.aquarium.left + this.aquarium.width) - this.size.width;
+      this.x2 = (this.aquarium.left + this.aquarium.width);
     } else {
       this.x1 = centerX - this.size.width / 2;
       this.x2 = centerX + this.size.width / 2;
