@@ -266,9 +266,11 @@ class Aquarium {
   }
 }
 
-Aquarium.LEFT = 0;
+// Aquarium.LEFT = 0;
+Aquarium.LEFT = 150;
 Aquarium.WIDTH = 450;
-Aquarium.SIDEBAR_LEFT = 450;
+// Aquarium.SIDEBAR_LEFT = 450;
+Aquarium.SIDEBAR_LEFT = 0;
 Aquarium.SIDEBAR_WIDTH = 150;
 Aquarium.CANVAS_WIDTH = Aquarium.WIDTH + Aquarium.SIDEBAR_WIDTH;
 Aquarium.CANVAS_HEIGHT = 600;
