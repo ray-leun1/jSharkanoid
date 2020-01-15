@@ -43,7 +43,7 @@ class Aquarium {
   collision(shark) {
     // Wall and ceiling collision
     if ( // Left and right wall collision
-      (shark.pos.x < shark.size && shark.vel.x < 0) ||
+      (shark.pos.x < (Aquarium.LEFT + shark.size) && shark.vel.x < 0) ||
       (shark.pos.x > ((Aquarium.LEFT + Aquarium.WIDTH) - shark.size) && shark.vel.x > 0)
     ) {
       shark.calcAngle('vel x mirror');
