@@ -55,52 +55,52 @@ class Pages {
     this.ctx.font = 'bold 56px sans-serif';
     this.ctx.fillStyle = '#def3f6'
     this.ctx.textAlign = 'center';
-    this.ctx.fillText('ATE \'EM', this.Aquarium.WIDTH / 2, this.Aquarium.CANVAS_HEIGHT / 2 - 24);
+    this.ctx.fillText('ATE \'EM', this.Aquarium.LEFT + (this.Aquarium.WIDTH / 2), this.Aquarium.CANVAS_HEIGHT / 2 - 24);
 
     this.ctx.font = 'bold 32px monospace';
-    this.ctx.fillText('Nom More', this.Aquarium.WIDTH / 2, this.Aquarium.CANVAS_HEIGHT / 2 + 32);
+    this.ctx.fillText('Nom More', this.Aquarium.LEFT + (this.Aquarium.WIDTH / 2), this.Aquarium.CANVAS_HEIGHT / 2 + 32);
 
     this.ctx.beginPath();
-    this.ctx.moveTo(151, 310);
-    this.ctx.lineTo(300, 310);
-    this.ctx.lineTo(300, 332);
-    this.ctx.lineTo(151, 332);
+    this.ctx.moveTo(this.Aquarium.LEFT + 151, 310);
+    this.ctx.lineTo(this.Aquarium.LEFT + 300, 310);
+    this.ctx.lineTo(this.Aquarium.LEFT + 300, 332);
+    this.ctx.lineTo(this.Aquarium.LEFT + 151, 332);
     this.ctx.closePath();
   }
 
   drawGameover() {
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
     this.ctx.beginPath();
-    this.ctx.moveTo(0, 0);
-    this.ctx.lineTo(this.Aquarium.WIDTH, 0);
-    this.ctx.lineTo(this.Aquarium.WIDTH, this.Aquarium.CANVAS_HEIGHT);
-    this.ctx.lineTo(0, this.Aquarium.CANVAS_HEIGHT);
+    this.ctx.moveTo(this.Aquarium.LEFT, 0);
+    this.ctx.lineTo(this.Aquarium.LEFT + this.Aquarium.WIDTH, 0);
+    this.ctx.lineTo(this.Aquarium.LEFT + this.Aquarium.WIDTH, this.Aquarium.CANVAS_HEIGHT);
+    this.ctx.lineTo(this.Aquarium.LEFT, this.Aquarium.CANVAS_HEIGHT);
     this.ctx.closePath();
     this.ctx.fill();
 
     this.ctx.fillStyle = 'rgba(64, 103, 128, 0.55)';
     this.ctx.beginPath();
-    this.ctx.moveTo(this.Aquarium.WIDTH, 0);
+    this.ctx.moveTo(this.Aquarium.LEFT + this.Aquarium.WIDTH, 0);
     this.ctx.lineTo(this.Aquarium.CANVAS_WIDTH, 0);
     this.ctx.lineTo(this.Aquarium.CANVAS_WIDTH, this.Aquarium.CANVAS_HEIGHT);
-    this.ctx.lineTo(this.Aquarium.WIDTH, this.Aquarium.CANVAS_HEIGHT);
+    this.ctx.lineTo(this.Aquarium.LEFT + this.Aquarium.WIDTH, this.Aquarium.CANVAS_HEIGHT);
     this.ctx.closePath();
     this.ctx.fill();
 
     this.ctx.font = 'bold 56px sans-serif';
     this.ctx.fillStyle = '#ffffff';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText('GAME OVER', this.Aquarium.WIDTH / 2, this.Aquarium.CANVAS_HEIGHT / 2 - 24);
+    this.ctx.fillText('GAME OVER', this.Aquarium.LEFT + (this.Aquarium.WIDTH / 2), this.Aquarium.CANVAS_HEIGHT / 2 - 24);
 
     this.ctx.font = 'bold 32px monospace';
     this.ctx.fillStyle = '#ff7a00';
-    this.ctx.fillText('Restart', this.Aquarium.WIDTH / 2, this.Aquarium.CANVAS_HEIGHT / 2 + 32);
+    this.ctx.fillText('Restart', this.Aquarium.LEFT + (this.Aquarium.WIDTH / 2), this.Aquarium.CANVAS_HEIGHT / 2 + 32);
 
     this.ctx.beginPath();
-    this.ctx.moveTo(162, 310);
-    this.ctx.lineTo(290, 310);
-    this.ctx.lineTo(290, 332);
-    this.ctx.lineTo(162, 332);
+    this.ctx.moveTo(this.Aquarium.LEFT + 162, 310);
+    this.ctx.lineTo(this.Aquarium.LEFT + 290, 310);
+    this.ctx.lineTo(this.Aquarium.LEFT + 290, 332);
+    this.ctx.lineTo(this.Aquarium.LEFT + 162, 332);
     this.ctx.closePath();
   }
 }
