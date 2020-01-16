@@ -24,7 +24,7 @@ class Sidebar {
 
     aquarium.ctx.font = 'bold 18px sans-serif';
     aquarium.ctx.textAlign = 'start';
-    aquarium.ctx.fillText('About', 480, 575);
+    aquarium.ctx.fillText('About', this.Aquarium.SIDEBAR_LEFT + 30, 575);
 
     if (aquarium.paused) {
       aquarium.ctx.beginPath();

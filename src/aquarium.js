@@ -43,7 +43,7 @@ class Aquarium {
   collision(shark) {
     // Wall and ceiling collision
     if ( // Left and right wall collision
-      (shark.pos.x < shark.size && shark.vel.x < 0) ||
+      (shark.pos.x < (Aquarium.LEFT + shark.size) && shark.vel.x < 0) ||
       (shark.pos.x > ((Aquarium.LEFT + Aquarium.WIDTH) - shark.size) && shark.vel.x > 0)
     ) {
       shark.calcAngle('vel x mirror');
@@ -152,7 +152,7 @@ class Aquarium {
       } else if ((mouseX >= Aquarium.SIDEBAR_LEFT + 24) && (mouseX < Aquarium.SIDEBAR_LEFT + 97)) {
         this.paused = this.pages.about ? false : true;
         this.pages.about = this.pages.about ? false : true;
-      } else if ((mouseX > Aquarium.SIDEBAR_LEFT + 97) && (mouseX <= Aquarium.SIDEBAR_LEFT + 27)) {
+      } else if ((mouseX > Aquarium.SIDEBAR_LEFT + 97) && (mouseX <= Aquarium.SIDEBAR_LEFT + 127)) {
         this.paused = this.paused ? false : true;
         this.pages.about = false;
       }

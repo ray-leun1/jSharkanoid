@@ -177,26 +177,29 @@ Sealife.create = (aquarium, pos, scale, name) => {
 Sealife.generate = (Aquarium, aquarium) => {
   Object.keys(Sealife.fileAssociations).forEach((nommable, idx) => {
     let sizeable = () => {
-      let maxPosX, maxPosY, minScale, maxScale;
+      let minPosX = Aquarium.LEFT;
+      let maxPosX = Aquarium.LEFT + Aquarium.WIDTH;
+      let maxPosY = Aquarium.CANVAS_HEIGHT;
+      let minScale, maxScale;
 
       if (idx <= 15) {
-        maxPosX = Aquarium.LEFT + Aquarium.WIDTH - 48;
-        maxPosY = Aquarium.CANVAS_HEIGHT - 16 - 80;
+        maxPosX -= 48;
+        maxPosY += - 16 - 80;
         minScale = 0.25;
         maxScale = 3;
       } else if (idx <= 28) {
-        maxPosX = Aquarium.LEFT + Aquarium.WIDTH - 64;
-        maxPosY = Aquarium.CANVAS_HEIGHT - 32 - 80;
+        maxPosX -= 64;
+        maxPosY += - 32 - 80;
         minScale = 0.5;
         maxScale = 2;
       } else if (idx <= 32) {
-        maxPosX = Aquarium.LEFT + Aquarium.WIDTH - 96;
-        maxPosY = Aquarium.CANVAS_HEIGHT - 64 - 80;
+        maxPosX -= 96;
+        maxPosY += - 64 - 80;
         minScale = 0.75;
         maxScale = 1.5;
       } else {
-        maxPosX = Aquarium.LEFT + Aquarium.WIDTH - 128;
-        maxPosY = Aquarium.CANVAS_HEIGHT - 128 - 80;
+        maxPosX -= 128;
+        maxPosY += - 128 - 80;
         minScale = 1;
         maxScale = 1;
       }
@@ -205,7 +208,7 @@ Sealife.generate = (Aquarium, aquarium) => {
 
       return {
         pos: {
-          x: Math.floor(Math.random() * maxPosX),
+          x: minPosX + Math.floor(Math.random() * (maxPosX - minPosX)),
           y: Math.floor(Math.random() * maxPosY)
         },
         scale: scale >= minScale ? scale : minScale
