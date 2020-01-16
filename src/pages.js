@@ -10,44 +10,44 @@ class Pages {
   drawAbout() {
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
     this.ctx.beginPath();
-    this.ctx.moveTo(0, 0);
-    this.ctx.lineTo(this.Aquarium.WIDTH, 0);
-    this.ctx.lineTo(this.Aquarium.WIDTH, this.Aquarium.CANVAS_HEIGHT);
-    this.ctx.lineTo(0, this.Aquarium.CANVAS_HEIGHT);
+    this.ctx.moveTo(this.Aquarium.LEFT, 0);
+    this.ctx.lineTo(this.Aquarium.LEFT + this.Aquarium.WIDTH, 0);
+    this.ctx.lineTo(this.Aquarium.LEFT + this.Aquarium.WIDTH, this.Aquarium.CANVAS_HEIGHT);
+    this.ctx.lineTo(this.Aquarium.LEFT, this.Aquarium.CANVAS_HEIGHT);
     this.ctx.closePath();
     this.ctx.fill();
 
     this.ctx.textAlign = 'start';
     this.ctx.fillStyle = '#def3f6'
     this.ctx.font = 'bold 16px sans-serif';
-    this.ctx.fillText('About', 20, 30);
-    this.ctx.fillText('Controls', 20, 150);
-    this.ctx.fillText('Credits', 20, 300);
+    this.ctx.fillText('About', this.Aquarium.LEFT + 20, 30);
+    this.ctx.fillText('Controls', this.Aquarium.LEFT + 20, 150);
+    this.ctx.fillText('Credits', this.Aquarium.LEFT + 20, 300);
 
     this.ctx.font = '14px sans-serif';
-    this.ctx.fillText('The ocean is brimming with peacefully coexisting life!', 20, 50);
-    this.ctx.fillText('Help your shark consume them all, but prevent it from', 20, 70);
-    this.ctx.fillText('swimming too deep, or its ravenous hunger will drag it', 20, 90);
-    this.ctx.fillText('down into the painful depths!', 20, 110);
+    this.ctx.fillText('The ocean is brimming with peacefully coexisting life!', this.Aquarium.LEFT + 20, 50);
+    this.ctx.fillText('Help your shark consume them all, but prevent it from', this.Aquarium.LEFT + 20, 70);
+    this.ctx.fillText('swimming too deep, or its ravenous hunger will drag it', this.Aquarium.LEFT + 20, 90);
+    this.ctx.fillText('down into the painful depths!', this.Aquarium.LEFT + 20, 110);
 
-    this.ctx.fillText('Use the mouse to position the launchpad.', 20, 170);
-    this.ctx.fillText('Click and hold to aim your shark.', 20, 190);
-    this.ctx.fillText('Release to launch!', 20, 210);
-    this.ctx.fillText('Continue using the launchpad to ', 20, 240);
-    this.ctx.fillText('redirect your shark away from the deep!', 20, 260);
+    this.ctx.fillText('Use the mouse to position the launchpad.', this.Aquarium.LEFT + 20, 170);
+    this.ctx.fillText('Click and hold to aim your shark.', this.Aquarium.LEFT + 20, 190);
+    this.ctx.fillText('Release to launch!', this.Aquarium.LEFT + 20, 210);
+    this.ctx.fillText('Continue using the launchpad to ', this.Aquarium.LEFT + 20, 240);
+    this.ctx.fillText('redirect your shark away from the deep!', this.Aquarium.LEFT + 20, 260);
 
-    this.ctx.fillText('Background: https://opengameart.org/users/', 20, 320);
-    this.ctx.fillText('game-developer-studio', 116, 340);
-    this.ctx.fillText('Sea Nommables: https://rapidpunches.itch.io/', 20, 360);
-    this.ctx.fillText('Shark: https://opengameart.org/users/pillarist', 20, 380);
-    this.ctx.fillText('BGM: "Sunken Suite" (djpretzel / https://ocremix.org)', 20, 400);
-    this.ctx.fillText('Chomp Sounds: https://opengameart.org/users/darsycho', 20, 420);
+    this.ctx.fillText('Background: https://opengameart.org/users/', this.Aquarium.LEFT + 20, 320);
+    this.ctx.fillText('game-developer-studio', this.Aquarium.LEFT + 116, 340);
+    this.ctx.fillText('Sea Nommables: https://rapidpunches.itch.io/', this.Aquarium.LEFT + 20, 360);
+    this.ctx.fillText('Shark: https://opengameart.org/users/pillarist', this.Aquarium.LEFT + 20, 380);
+    this.ctx.fillText('BGM: "Sunken Suite" (djpretzel / https://ocremix.org)', this.Aquarium.LEFT + 20, 400);
+    this.ctx.fillText('Chomp Sounds: https://opengameart.org/users/darsycho', this.Aquarium.LEFT + 20, 420);
 
     this.ctx.beginPath();
-    this.ctx.moveTo(474, 553);
-    this.ctx.lineTo(577, 553);
-    this.ctx.lineTo(577, 583);
-    this.ctx.lineTo(474, 583);
+    this.ctx.moveTo(this.Aquarium.SIDEBAR_LEFT + 24, 553);
+    this.ctx.lineTo(this.Aquarium.SIDEBAR_LEFT + 127, 553);
+    this.ctx.lineTo(this.Aquarium.SIDEBAR_LEFT + 127, 583);
+    this.ctx.lineTo(this.Aquarium.SIDEBAR_LEFT + 24, 583);
     this.ctx.closePath();
   }
 
