@@ -137,13 +137,13 @@ class Aquarium {
 
     if (!this.bgm.ended) this.bgm.play();
 
-    if (mouseX >= Aquarium.LEFT && mouseX <= Aquarium.WIDTH && this.shark.launching && !this.paused && !this.pages.gameover) {
+    if (mouseX >= Aquarium.LEFT && mouseX <= (Aquarium.LEFT + Aquarium.WIDTH) && this.shark.launching && !this.paused && !this.pages.gameover) {
       this.shark.launching = false;
       this.shark.setSpeed(5 + this.calcSpeedAdjust() - this.prevSpeedAdjust);
     }
 
     if (this.ctx.isPointInPath(mouseX, mouseY)) {
-      if (mouseX > Aquarium.LEFT && mouseX < Aquarium.WIDTH) {
+      if (mouseX > Aquarium.LEFT && mouseX < (Aquarium.LEFT + Aquarium.WIDTH)) {
         if (this.pages.victory) {
           this.continue();
         } else if (this.pages.gameover) {
@@ -163,7 +163,7 @@ class Aquarium {
     let mouseX = e.clientX - this.offset.x;
     let mouseY = e.clientY - this.offset.y;
 
-    if (mouseX <= Aquarium.WIDTH
+    if (mouseX > Aquarium.LEFT && mouseX <= (Aquarium.LEFT + Aquarium.WIDTH)
       && this.shark.launching
       && !this.paused
       && !this.pages.gameover
