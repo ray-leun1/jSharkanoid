@@ -105,7 +105,7 @@ class Sidebar {
 
     aquarium.ctx.fillText('Shark Lives', this.Aquarium.SIDEBAR_LEFT + (this.Aquarium.SIDEBAR_WIDTH / 2), 350);
     if (aquarium.shark.hp < 1) {
-      aquarium.ctx.drawImage(this.assets.death, 476, 365);
+      aquarium.ctx.drawImage(this.assets.death, this.Aquarium.SIDEBAR_LEFT + 26, 365);
     } else {
       if (aquarium.shark.hp >= 1) aquarium.ctx.drawImage(this.assets.life, this.Aquarium.SIDEBAR_LEFT + 15, 365, 36, 36);
       if (aquarium.shark.hp >= 2) aquarium.ctx.drawImage(this.assets.life, this.Aquarium.SIDEBAR_LEFT + 56, 365, 36, 36);
