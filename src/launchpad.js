@@ -1,11 +1,11 @@
 class Launchpad {
-  constructor(aquarium) {
-    this.aquarium = aquarium;
+  constructor(Aquarium) {
+    this.Aquarium = Aquarium;
     this.image = new Image();
     this.image.src = './img/Launchpad.png';
     this.size = {width: 80, height: 14};
-    this.x1 = ((aquarium.left + aquarium.width) / 2) - (this.size.width / 2);
-    this.y1 = aquarium.height - 16 - this.size.height;
+    this.x1 = ((Aquarium.left + Aquarium.width) / 2) - (this.size.width / 2);
+    this.y1 = Aquarium.height - 16 - this.size.height;
     this.x2 = this.x1 + this.size.width;
     this.y2 = this.y1 + this.size.height;
     this.vel = 0;
@@ -42,12 +42,12 @@ class Launchpad {
   setPos(centerX) {
     let oldx1 = this.x1;
 
-    if (centerX < (this.aquarium.left + this.size.width / 2)) {
-      this.x1 = this.aquarium.left;
-      this.x2 = this.aquarium.left + this.size.width;
-    } else if (centerX > ((this.aquarium.left + this.aquarium.width) - this.size.width / 2)) {
-      this.x1 = (this.aquarium.left + this.aquarium.width) - this.size.width;
-      this.x2 = (this.aquarium.left + this.aquarium.width);
+    if (centerX < (this.Aquarium.left + this.size.width / 2)) {
+      this.x1 = this.Aquarium.left;
+      this.x2 = this.Aquarium.left + this.size.width;
+    } else if (centerX > ((this.Aquarium.left + this.Aquarium.width) - this.size.width / 2)) {
+      this.x1 = (this.Aquarium.left + this.Aquarium.width) - this.size.width;
+      this.x2 = (this.Aquarium.left + this.Aquarium.width);
     } else {
       this.x1 = centerX - this.size.width / 2;
       this.x2 = centerX + this.size.width / 2;
