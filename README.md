@@ -28,10 +28,12 @@ The game features a variety of object collision and rotational calculations that
 While different collision checks were implemented in each individual object that the shark collides with, the angle calculations were all determined from the shark file. Here, the two more notabel collision cases are 'corner' and 'launchpad', which both have special rules on how to determine the next angle of the shark.
 
 ```javascript
+// shark.js
 calcAngle(option, params) {
   if (option === 'vel x mirror') {
     if (this.vel.y < 0) this.setAngle(540 - this.angle);
-    if (this.vel.y > 0) this.setAngle(180 - this.angle);
+    else if (this.vel.y === 0) this.setAngle(this.angle + (Math.random() * 10 - 5));
+    else if (this.vel.y > 0) this.setAngle(180 - this.angle);
   } else if (option === 'vel y mirror') {
     this.setAngle(360 - this.angle);
   } else if (option === 'corner') {
@@ -59,6 +61,7 @@ calcAngle(option, params) {
 A case that required some testing was the position of the shark in its own local coordinates. This was used to determine its location when drawing it in canvas, as the canvas needed to be rotated before drawing the shark image in order to handle image rotation.
 
 ```javascript
+// shark.js
 localPos() { // Calculate position in shark local coordinates
   let cosAngle = Math.cos(Math.PI * this.angle / 180);
   let sinAngle = Math.sin(Math.PI * this.angle / 180);
