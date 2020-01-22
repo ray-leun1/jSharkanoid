@@ -72,4 +72,25 @@ localPos() { // Calculate position in shark local coordinates
 }
 ```
 
+Creating buttons in the canvas without involving new elements meant using the most recently drawn path to focus on the button areas. Clicking within that area would then produce results.
+
+```javascript
+// aquarium.js
+if (this.ctx.isPointInPath(mouseX, mouseY)) {
+  if (mouseX > Aquarium.LEFT && mouseX < (Aquarium.LEFT + Aquarium.WIDTH)) {
+    if (this.pages.victory) {
+      this.continue();
+    } else if (this.pages.gameover) {
+      this.reset();
+    }
+  } else if ((mouseX >= Aquarium.SIDEBAR_LEFT + 24) && (mouseX < Aquarium.SIDEBAR_LEFT + 97)) {
+    this.paused = this.pages.about ? false : true;
+    this.pages.about = this.pages.about ? false : true;
+  } else if ((mouseX > Aquarium.SIDEBAR_LEFT + 97) && (mouseX <= Aquarium.SIDEBAR_LEFT + 127)) {
+    this.paused = this.paused ? false : true;
+    this.pages.about = false;
+  }
+}
+```
+
 Thank you for playing jSharkanoid!
